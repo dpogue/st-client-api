@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:isScrollContainer="true">
+
+	<ScrollView android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+
+		<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:isScrollContainer="true">
+
+			<TextView android:id="@+id/label_url" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:textSize="17dip"
+				android:text="@string/url" />
+
+			<EditText android:id="@+id/textbox_url"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:textSize="25dip"
+				android:background="@android:drawable/editbox_background"
+				android:layout_below="@id/label_url" />
+
+			<TextView
+		        android:id="@+id/label_user"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:textSize="17dip"
+		        android:layout_below="@id/textbox_url"
+		        android:text="@string/username"/>
+		    <EditText
+		        android:id="@+id/textbox_user"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:textSize="25dip"
+		        android:background="@android:drawable/editbox_background"
+		        android:layout_below="@id/label_user"/>
+		        
+		    <TextView
+		        android:id="@+id/label_password"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:textSize="17dip"
+		        android:layout_below="@id/textbox_user"
+		        android:text="@string/password"/>
+		    <EditText
+		        android:id="@+id/textbox_password"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:textSize="25dip"
+		        android:background="@android:drawable/editbox_background"
+		        android:password="true"
+		        android:layout_below="@id/label_password"/>
+		        
+   			<TextView android:id="@+id/label_poll" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:textSize="17dip" android:paddingTop="10dp"
+				android:text="@string/ping" android:layout_below="@id/textbox_password" />
+			<Spinner android:id="@+id/spinner_poll" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:prompt="@string/ping"
+				android:layout_below="@id/label_poll" />
+
+
+			<Button android:id="@+id/btn_ok" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_below="@id/spinner_poll"  android:layout_marginTop="20dip"
+				android:text="Save Settings" />
+
+			<Button android:id="@+id/btn_cancel" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_below="@id/btn_ok"
+				android:layout_marginTop="10dip" android:text="Cancel" />
+
+		</RelativeLayout>
+	</ScrollView>
+</LinearLayout>
