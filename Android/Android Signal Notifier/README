@@ -1,0 +1,40 @@
+==README==
+
+Author: Terence Stenvold 2010 
+
+The code in st-signals is for Android devices 2.2 but should run on devices 1.5 and up.
+If you want to test the could look for the .apk in the bin folder. This apk is not signed so you will need to enable "Unknown Sources" in your phones settings.
+
+It can be installed using ADB or and application such as Astro File manager.
+
+==Usage==
+*Clicking on the application and enter configures and hitting ok runs the service in the background
+*When a new signal is posted a notifcation will show
+*Drag down the top bar and click on the notifcation
+*This will open up the browser with the mobile version of the signals showing.
+
+==Caveats==
+*To stop service you need a task manager or go into settings and running services to stop.
+*Does not use any API calls
+*Assumes that all messages before the start of the service have already been viewed.
+*Settings will change on the next update interval IE if you set 60min for poll time and then change it to 1min you will have to wait 60min before the settings will change. Unless of course you stop the service and restart it.
+*No settings for what signals you get. Any signal post after you start the service will be a notification.
+*You need to login in to the web browser when it opens which potentially means you have to login everytime you get a notifcation unless you select remember me.
+
+
+Copyright and License
+=============================================================================
+
+Copyright 2010 Terence Stenvold.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file or any other file under this directory except in compliance with
+the License. You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations
+under the License. 
