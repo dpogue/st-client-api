@@ -2,7 +2,7 @@ package com.socialtext;
 
 import java.util.Date;
 
-public class Signal
+public class Signal : STObject
 {
     private String m_body;
     private Date m_date;
@@ -10,9 +10,13 @@ public class Signal
 
     public Signal() { }
 
-    public Signal(String body)
+    public Signal(String json)
     {
-        m_body = body;
+        fromJSON(json);
+    }
+
+    public void fromJSON(String json)
+    {
     }
 
     public String toJSON()
