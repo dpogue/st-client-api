@@ -2,7 +2,7 @@ package com.socialtext;
 
 import java.util.Date;
 
-public class Signal : STObject
+public class Signal extends STObject
 {
     private String m_body;
     private Date m_date;

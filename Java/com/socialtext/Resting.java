@@ -1,5 +1,22 @@
 package com.socialtext;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.net.URI;
+import java.net.URISyntaxException;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.params.HttpParams;
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.json.JSONArray;
+
 public class Resting
 {
     public enum Route
@@ -77,7 +94,7 @@ public class Resting
     private String m_username;
     private String m_password;
     private String m_workspace;
-    private Mimetype m_accept = Mimetype.JSON; /* JSON by default */
+    private Mimetype m_default_mime = Mimetype.JSON; /* JSON by default */
 
     /**
      * Creates a Socialtext ReST connection.
@@ -176,15 +193,51 @@ public class Resting
      * @param accepttype The type we accept (see contenttype for values)
      * @param data The data that we are sending (if any)
      */
-    private void request(String url, Method method, Mimetype contenttype,
+    private String request(String url, Method method, Mimetype contenttype,
                             Mimetype accepttype, String data)
     {
-        if (accepttype == null)
+        accepttype = (accepttype != null) ? accepttype : m_default_mime;
+        contenttype = (contenttype != null) ? contenttype : m_default_mime;
+
+        try
         {
-            accepttype = m_accept;
+            URI uri = new URI(m_site_url + url);
+        } catch (URISyntaxException e) {
+            return e.toString();
         }
-        /* We send the HTTP request here */
-        /* Make sure we auth with username/password! */
+        HttpParams params = new BasicHttpParams();
+        params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
+                HttpVersion.HTTP_1_1);
+        DefaultHttpClient httpclient = new DefaultHttpClient(params);
+
+        HttpResponse response;
+        HttpGet httpget = new HttpGet(url);
+        httpget.setHeader("Accept", accepttype.getType());
+        httpget.setHeader("Content-Type", contenttype.getType());
+        httpclient.getCredentialsProvider().setCredentials(
+                new AuthScope(null, -1),
+                new UsernamePasswordCredentials(m_username, m_password));
+
+        try
+        {
+            response = httpclient.execute(httpget);
+            HttpEntity entity = response.getEntity();
+
+            if (entity != null) {
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                entity.writeTo(os);
+                String result = os.toString("UTF8");
+
+                return result;
+            }
+             return null;
+        }
+        catch (Throwable e)
+        {
+            /* Error handling? What Error handling? :D */
+
+            return null;
+        }
     }
 
     /**
@@ -194,9 +247,25 @@ public class Resting
      */
     public void postSignal(Signal signal)
     {
-        String path = m_site_url + Route.getRoute("SIGNALS");
+        String path = Route.getRoute("SIGNALS");
 
         request(path, Method.POST, Mimetype.JSON, Mimetype.TEXT,
                 signal.toJSON());
+    }
+
+    public Signal[] getSignals()
+    {
+        return getSignals(new Date(0));
+    }
+
+    public Signal[] getSignals(Date after)
+    {
+        String path = Route.getRoute("SIGNALS") + "?after=" + (new SimpleDateFormat("yyyy-MM-dd%20HH:mm:ss").format(after));
+        String json = request(path, Method.GET, Mimetype.JSON,
+                        Mimetype.JSON, null);
+
+        System.out.println(json);
+
+        return null;
     }
 }
