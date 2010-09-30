@@ -199,9 +199,10 @@ public class Resting
         accepttype = (accepttype != null) ? accepttype : m_default_mime;
         contenttype = (contenttype != null) ? contenttype : m_default_mime;
 
+        URI uri;
         try
         {
-            URI uri = new URI(m_site_url + url);
+            uri = new URI(m_site_url + url);
         } catch (URISyntaxException e) {
             return e.toString();
         }
@@ -211,7 +212,7 @@ public class Resting
         DefaultHttpClient httpclient = new DefaultHttpClient(params);
 
         HttpResponse response;
-        HttpGet httpget = new HttpGet(url);
+        HttpGet httpget = new HttpGet(uri);
         httpget.setHeader("Accept", accepttype.getType());
         httpget.setHeader("Content-Type", contenttype.getType());
         httpclient.getCredentialsProvider().setCredentials(
@@ -230,13 +231,13 @@ public class Resting
 
                 return result;
             }
-             return null;
+            return entity.toString();
         }
         catch (Throwable e)
         {
             /* Error handling? What Error handling? :D */
 
-            return null;
+            return e.toString();
         }
     }
 
@@ -261,6 +262,7 @@ public class Resting
     public Signal[] getSignals(Date after)
     {
         String path = Route.getRoute("SIGNALS") + "?after=" + (new SimpleDateFormat("yyyy-MM-dd%20HH:mm:ss").format(after));
+        System.out.println(path);
         String json = request(path, Method.GET, Mimetype.JSON,
                         Mimetype.JSON, null);
 
