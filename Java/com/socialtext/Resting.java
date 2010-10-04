@@ -256,12 +256,17 @@ public class Resting
 
     public Signal[] getSignals()
     {
-        return getSignals(new Date(0));
+        return getSignals("");
     }
 
     public Signal[] getSignals(Date after)
     {
-        String path = Route.getRoute("SIGNALS") + "?after=" + (new SimpleDateFormat("yyyy-MM-dd%20HH:mm:ss").format(after));
+        return getSignals("?after=" + (new SimpleDateFormat("yyyy-MM-dd%20HH:mm:ss").format(after));
+    }
+
+    public Signal[] getSignals(String request)
+    {
+        String path = Route.getRoute("SIGNALS") + request;
         System.out.println(path);
         String json = request(path, Method.GET, Mimetype.JSON,
                         Mimetype.JSON, null);
@@ -270,4 +275,7 @@ public class Resting
 
         return null;
     }
+    
+    
+
 }
