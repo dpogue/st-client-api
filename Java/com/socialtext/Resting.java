@@ -1,6 +1,7 @@
 package com.socialtext;
 
 import java.util.Date;
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,7 +15,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpParams;
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.json.JSONArray;
 
 public class Resting
