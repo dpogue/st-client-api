@@ -261,7 +261,7 @@ public class Resting
 
     public Signal[] getSignals(Date after)
     {
-        return getSignals("?after=" + (new SimpleDateFormat("yyyy-MM-dd%20HH:mm:ss").format(after));
+        return getSignals("?after=" + (new SimpleDateFormat("yyyy-MM-dd%20HH:mm:ss").format(after)));
     }
 
     public Signal[] getSignals(String request)
