@@ -1,6 +1,7 @@
 package com.socialtext;
 
 import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class SignalBuilder
 {
@@ -9,12 +10,12 @@ public class SignalBuilder
   
     public String after(Date after)
     {
-	return "after=" + (new SimpleDateFormat("yyyy-MM-dd%20HH:mm:ss").format(after)));
+	return "after=" + (new SimpleDateFormat("yyyy-MM-dd%20HH:mm:ss").format(after));
     }
 
     public String before(Date before)
     {
-	return "before=" + (new SimpleDateFormat("yyyy-MM-dd%20HH:mm:ss").format(before)));
+	return "before=" + (new SimpleDateFormat("yyyy-MM-dd%20HH:mm:ss").format(before));
     }
 
     public String follow()
@@ -24,7 +25,7 @@ public class SignalBuilder
 
     public String accounts(int id)
     {
-	return "accounts="+String.parseInt(id);
+	return "accounts="+Integer.toString(id);
     }
 
     public String orderDesc ()
