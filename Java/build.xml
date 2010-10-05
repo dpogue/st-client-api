@@ -18,10 +18,11 @@
 
     <target name="run" depends="compile">
         <java dir="build/classes" classname="Test" classpathref="classpath" fork="true" >
-	  <classpath>
-	    <path location="build/classes"/>
-	   </classpath>
-	  </java>
+            <classpath>
+                <path location="build/classes"/>
+            </classpath>
+            <arg line="${test.args}" />
+	    </java>
     </target>
 
 </project>

@@ -19,6 +19,8 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONException;
 
 public class Resting
 {
@@ -219,6 +221,7 @@ public class Resting
         if (method == Method.POST)
         {
             httpreq = new HttpPost(uri);
+            /* We need to set the request body here... */
         }
         else
         {
@@ -279,15 +282,26 @@ public class Resting
     public Signal[] getSignals(String request)
     {
         String path = Route.getRoute("SIGNALS") + request;
-        System.out.println(path);
+        //System.out.println(path);
         String json = request(path, Method.GET, Mimetype.JSON,
                         Mimetype.JSON, null);
 
-        System.out.println(json);
+        Signal[] signals;
+        try
+        {
+            JSONArray sigs = new JSONArray(json);
+            signals = new Signal[sigs.length()];
 
-        return null;
+            for (int i = 0; i < sigs.length(); i++) {
+                signals[i] = new Signal(sigs.getJSONObject(i).toString());
+            }
+        }
+        catch (JSONException e)
+        {
+            signals = null;
+            e.printStackTrace();
+        }
+
+        return signals;
     }
-    
-    
-
 }

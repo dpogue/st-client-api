@@ -1,5 +1,7 @@
 package com.socialtext;
 
+import org.json.JSONException;
+
 public abstract class STObject
 {
     /**
@@ -13,6 +15,7 @@ public abstract class STObject
      * Returns the JSON representation of the instance members.
      *
      * @return JSON representation as a string.
+     * @throws JSONException
      */
-    public abstract String toJSON();
+    public abstract String toJSON() throws JSONException;
 }
