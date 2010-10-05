@@ -15,4 +15,13 @@
         <mkdir dir="build/classes" />
         <javac srcdir="." destdir="build/classes" classpathref="classpath" includeantruntime="false" />
     </target>
+
+    <target name="run" depends="compile">
+        <java dir="build/classes" classname="Test" classpathref="classpath" fork="true" >
+	  <classpath>
+	    <path location="build/classes"/>
+	   </classpath>
+	  </java>
+    </target>
+
 </project>
