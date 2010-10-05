@@ -10,7 +10,10 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
@@ -212,16 +215,25 @@ public class Resting
         DefaultHttpClient httpclient = new DefaultHttpClient(params);
 
         HttpResponse response;
-        HttpGet httpget = new HttpGet(uri);
-        httpget.setHeader("Accept", accepttype.getType());
-        httpget.setHeader("Content-Type", contenttype.getType());
+        HttpRequestBase httpreq;
+        if (method == Method.POST)
+        {
+            httpreq = new HttpPost(uri);
+        }
+        else
+        {
+            /* Default to GET */
+            httpreq = new HttpGet(uri);
+        }
+        httpreq.setHeader("Accept", accepttype.getType());
+        httpreq.setHeader("Content-Type", contenttype.getType());
         httpclient.getCredentialsProvider().setCredentials(
                 new AuthScope(null, -1),
                 new UsernamePasswordCredentials(m_username, m_password));
 
         try
         {
-            response = httpclient.execute(httpget);
+            response = httpclient.execute(httpreq);
             HttpEntity entity = response.getEntity();
 
             if (entity != null) {
