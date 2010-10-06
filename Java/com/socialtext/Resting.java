@@ -2,6 +2,7 @@ package com.socialtext;
 
 import java.util.Date;
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,6 +15,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
@@ -209,6 +211,7 @@ public class Resting
         {
             uri = new URI(m_site_url + url);
         } catch (URISyntaxException e) {
+            e.printStackTrace();
             return e.toString();
         }
         HttpParams params = new BasicHttpParams();
@@ -222,6 +225,16 @@ public class Resting
         {
             httpreq = new HttpPost(uri);
             /* We need to set the request body here... */
+            try
+            {
+                StringEntity postbody = new StringEntity(data);
+                ((HttpPost)httpreq).setEntity(postbody);
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                e.printStackTrace();
+                return e.toString();
+            }
         }
         else
         {
@@ -251,7 +264,7 @@ public class Resting
         catch (Throwable e)
         {
             /* Error handling? What Error handling? :D */
-
+            e.printStackTrace();
             return e.toString();
         }
     }
@@ -265,8 +278,16 @@ public class Resting
     {
         String path = Route.getRoute("SIGNALS");
 
-        request(path, Method.POST, Mimetype.JSON, Mimetype.TEXT,
-                signal.toJSON());
+        try
+        {
+            request(path, Method.POST, Mimetype.JSON, Mimetype.JSON,
+                    signal.toJSON());
+        }
+        catch (JSONException e)
+        {
+            System.out.println("Json Exception: ");
+            e.printStackTrace();
+        }
     }
 
     public Signal[] getSignals()

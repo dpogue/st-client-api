@@ -23,6 +23,16 @@ public class Signal extends STObject
         fromJSON(json);
     }
 
+    public String getBody()
+    {
+        return m_body;
+    }
+
+    public void setBody(String body)
+    {
+        m_body = body;
+    }
+
     public void fromJSON(String json)
     {
         try

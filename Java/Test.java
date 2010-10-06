@@ -16,5 +16,10 @@ public class Test
         for (int i = 0; i < sigs.length; i++) {
             System.out.println(sigs[i]);
         }
+
+        // Testing a post
+        Signal dox = new Signal();
+        dox.setBody("Sending a signal from Java...");
+        r.postSignal(dox);
     }
 }
