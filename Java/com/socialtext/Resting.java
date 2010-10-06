@@ -228,7 +228,7 @@ public class Resting
             /* We need to set the request body here... */
             try
             {
-                StringEntity postbody = new StringEntity(data);
+                StringEntity postbody = new StringEntity(data, "UTF-8");
                 ((HttpPost)httpreq).setEntity(postbody);
             }
             catch (UnsupportedEncodingException e)
