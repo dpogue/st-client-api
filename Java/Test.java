@@ -1,5 +1,6 @@
 import com.socialtext.Resting;
 import com.socialtext.Signal;
+import java.util.ArrayList;
 
 public class Test
 {
@@ -11,10 +12,10 @@ public class Test
         
         Resting r = new Resting(url, username, password);
         
-        Signal[] sigs = r.getSignals();
+        ArrayList<Signal> sigs = r.getSignals();
 
-        for (int i = 0; i < sigs.length; i++) {
-            System.out.println(sigs[i]);
+        for (int i = 0; i < sigs.size(); i++) {
+            System.out.println(sigs.get(i));
         }
 
         // Testing a post
