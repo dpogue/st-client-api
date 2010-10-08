@@ -3,7 +3,7 @@
     <description>Builds, tests, and runs the Socialtext Java API.</description>
 
     <path id="classpath">
-        <fileset dir="." />
+        <fileset dir="." includes="**/*.class" />
         <fileset dir="lib" includes="**/*.jar" />
     </path>
 
@@ -14,6 +14,22 @@
     <target name="compile">
         <mkdir dir="build/classes" />
         <javac srcdir="." destdir="build/classes" classpathref="classpath" includeantruntime="false" />
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="build/jar" />
+        <pathconvert property="jar.classpath" pathsep=" ">
+            <path refid="classpath" />
+            <flattenmapper />
+        </pathconvert>
+        <jar destfile="build/jar/Socialtext.jar">
+            <manifest>
+                <attribute name="Main-Class" value="PostSignal" />
+                <attribute name="Class-Path" value="${jar.classpath}" />
+            </manifest>
+            <fileset dir="build/classes" />
+            <zipgroupfileset dir="lib" includes="*.jar" />
+        </jar>
     </target>
 
     <target name="run" depends="compile">

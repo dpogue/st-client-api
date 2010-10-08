@@ -314,6 +314,7 @@ public class Resting
         }
         catch (JSONException e)
         {
+            System.out.println(json);
             signals = null;
             e.printStackTrace();
         }
