@@ -36,7 +36,8 @@ public class Resting
         PAGEATTACHMENT("/data/workspaces/%s/pages/%s/attachments/%s"),
         PAGEATTACHMENTS("/data/workspaces/%s/pages/%s/attachments"),
         PEOPLE("/data/people"),
-        PERSON("/data/person/%s"),
+        PERSON("/data/people/%s"),
+        PERSONTAG("/data/people/%s/tag"),
         SIGNALS("/data/signals"),
         TAGGEDPAGES("/data/workspaces/%s/tags/%s/pages"),
         WORKSPACE("/data/workspaces/%s"),
@@ -322,25 +323,25 @@ public class Resting
         return signals;
     }
 
-    public ArrayList<People> getPeople()
+    public ArrayList<Person> getPeople()
     {
         return getPeople("");
     }
 
-    public ArrayList<People> getPeople(String request)
+    public ArrayList<Person> getPeople(String request)
     {
         String path = Route.getRoute("PEOPLE") + request;
         //System.out.println(path);
         String json = request(path, Method.GET, Mimetype.JSON,
                         Mimetype.JSON, null);
 
-	    ArrayList<People> people = new ArrayList<People>();
+	    ArrayList<Person> people = new ArrayList<Person>();
 	    try
         {
 	       JSONArray peops = new JSONArray(json);
 
 	      for (int i = 0; i < peops.length(); i++) {
-	          people.add(new People(peops.getJSONObject(i).toString()));
+	          people.add(new Person(peops.getJSONObject(i).toString()));
 	      }
         }
 	    catch (JSONException e)

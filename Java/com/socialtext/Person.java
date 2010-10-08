@@ -8,28 +8,38 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class People extends STObject
+public class Person extends STObject
 {
    
     private String m_best_full_name;
     private String m_sort_key;
-    private int m_peopleid;
+    private int m_personid;
     
-    public People() { }
+    public Person() { }
 
-    public People(String json)
+    public Person(String json)
     {
         fromJSON(json);
     }
 
     public int getId()
     {
-        return m_peopleid;
+        return m_personid;
+    }
+
+    public void setId(int id)
+    {
+        m_personid = id;
     }
     
     public String getFullname()
     {
         return m_best_full_name;
+    }
+
+    public void setFullname(String name)
+    {
+        m_best_full_name = name;
     }
     
     public String getSortkey()
@@ -43,7 +53,7 @@ public class People extends STObject
         {
             JSONObject jobj = new JSONObject(json);
             m_best_full_name = jobj.getString("best_full_name");
-            m_peopleid = jobj.getInt("id");
+            m_personid = jobj.getInt("id");
             m_sort_key = jobj.getString("sort_key");
         }
         catch (JSONException e)
@@ -53,12 +63,12 @@ public class People extends STObject
     
     public String toJSON() throws JSONException
     {
-        //This should not be used. We cannot create people
+        //This should not be used. We cannot create Person
         return null;
     }
 
     public String toString()
     {
-        return String.format("Name: \"%s\"\n\tid: %d\n\tSort key:\"%s\"", m_best_full_name, m_peopleid, m_sort_key);
+        return String.format("Name: \"%s\"\n\tid: %d\n\tSort key:\"%s\"", m_best_full_name, m_personid, m_sort_key);
     }
 }

@@ -46,9 +46,7 @@ public class Signal extends STObject
     private String m_body;
     private Date m_date;
     private int m_signalid;
-    //private Person m_sender;
-    private int m_userid; // part of Person m_sender
-    private String m_fullname; // part of Person m_sender
+    private Person m_sender;
     private String m_uri;
     private String m_hash;
     private Signal m_reply_to;
@@ -89,8 +87,9 @@ public class Signal extends STObject
                 m_date = new Date();
             }
             m_signalid = jobj.getInt("signal_id");
-            m_userid = jobj.getInt("user_id");
-            m_fullname = jobj.getString("best_full_name");
+            m_sender = new Person();
+            m_sender.setId(jobj.getInt("user_id"));
+            m_sender.setFullname(jobj.getString("best_full_name"));
             m_uri = jobj.getString("uri");
             m_hash = jobj.getString("hash");
 
@@ -117,7 +116,7 @@ public class Signal extends STObject
 
     public String toString()
     {
-        return String.format("\"%s\"\n\t-- %s (%s)", m_body, m_fullname,
+        return String.format("\"%s\"\n\t-- %s (%s)", m_body, m_sender.getFullname(),
                     new SimpleDateFormat("HH:mm:ss dd/MM/yyyy").format(m_date));
     }
 }
