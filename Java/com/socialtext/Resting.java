@@ -321,4 +321,36 @@ public class Resting
 
         return signals;
     }
+
+    public ArrayList<People> getPeople()
+    {
+        return getPeople("");
+    }
+
+    public ArrayList<People> getPeople(String request)
+    {
+        String path = Route.getRoute("PEOPLE") + request;
+        //System.out.println(path);
+        String json = request(path, Method.GET, Mimetype.JSON,
+                        Mimetype.JSON, null);
+
+	    ArrayList<People> people = new ArrayList<People>();
+	    try
+        {
+	       JSONArray peops = new JSONArray(json);
+
+	      for (int i = 0; i < peops.length(); i++) {
+	          people.add(new People(peops.getJSONObject(i).toString()));
+	      }
+        }
+	    catch (JSONException e)
+        {
+	       System.out.println(json);
+	       people = null;
+	       e.printStackTrace();
+        }
+
+        return people;
+    }
+
 }
