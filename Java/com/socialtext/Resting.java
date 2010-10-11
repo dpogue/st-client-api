@@ -1,6 +1,7 @@
 package com.socialtext;
 
 import java.util.Date;
+import java.util.ArrayList;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -35,7 +36,8 @@ public class Resting
         PAGEATTACHMENT("/data/workspaces/%s/pages/%s/attachments/%s"),
         PAGEATTACHMENTS("/data/workspaces/%s/pages/%s/attachments"),
         PEOPLE("/data/people"),
-        PERSON("/data/person/%s"),
+        PERSON("/data/people/%s"),
+        PERSONTAG("/data/people/%s/tag"),
         SIGNALS("/data/signals"),
         TAGGEDPAGES("/data/workspaces/%s/tags/%s/pages"),
         WORKSPACE("/data/workspaces/%s"),
@@ -290,39 +292,66 @@ public class Resting
         }
     }
 
-    public Signal[] getSignals()
+    public ArrayList<Signal> getSignals()
     {
         return getSignals("");
     }
 
-    public Signal[] getSignals(Date after)
-    {
-        return getSignals("?after=" + (new SimpleDateFormat("yyyy-MM-dd%20HH:mm:ss").format(after)));
-    }
-
-    public Signal[] getSignals(String request)
+    public ArrayList<Signal> getSignals(String request)
     {
         String path = Route.getRoute("SIGNALS") + request;
         //System.out.println(path);
         String json = request(path, Method.GET, Mimetype.JSON,
                         Mimetype.JSON, null);
 
-        Signal[] signals;
+        ArrayList<Signal> signals = new ArrayList<Signal>();
         try
         {
             JSONArray sigs = new JSONArray(json);
-            signals = new Signal[sigs.length()];
 
             for (int i = 0; i < sigs.length(); i++) {
-                signals[i] = new Signal(sigs.getJSONObject(i).toString());
+                signals.add(new Signal(sigs.getJSONObject(i).toString()));
             }
         }
         catch (JSONException e)
         {
+            System.out.println(json);
             signals = null;
             e.printStackTrace();
         }
 
         return signals;
     }
+
+    public ArrayList<Person> getPeople()
+    {
+        return getPeople("");
+    }
+
+    public ArrayList<Person> getPeople(String request)
+    {
+        String path = Route.getRoute("PEOPLE") + request;
+        //System.out.println(path);
+        String json = request(path, Method.GET, Mimetype.JSON,
+                        Mimetype.JSON, null);
+
+	    ArrayList<Person> people = new ArrayList<Person>();
+	    try
+        {
+	       JSONArray peops = new JSONArray(json);
+
+	      for (int i = 0; i < peops.length(); i++) {
+	          people.add(new Person(peops.getJSONObject(i).toString()));
+	      }
+        }
+	    catch (JSONException e)
+        {
+	       System.out.println(json);
+	       people = null;
+	       e.printStackTrace();
+        }
+
+        return people;
+    }
+
 }

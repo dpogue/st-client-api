@@ -1,20 +1,58 @@
 package com.socialtext;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.text.ParseException;
-import org.json.JSONObject;
+import java.text.SimpleDateFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Signal extends STObject
 {
+    public class Annotation
+    {
+        private String m_type;
+        private JSONObject m_data; // There are no rules...
+
+        public Annotation() { }
+
+        public Annotation(String type)
+        {
+            m_type = type;
+        }
+
+        public String getType()
+        {
+            return m_type;
+        }
+
+        public void setType(String type)
+        {
+            m_type = type;
+        }
+
+        public JSONObject getData()
+        {
+            return m_data;
+        }
+
+        public void setData(JSONObject data)
+        {
+            m_data = data;
+        }
+    }
+
     private String m_body;
     private Date m_date;
-    private int m_userid;
-    private String m_fullname;
+    private int m_signalid;
+    private Person m_sender;
     private String m_uri;
     private String m_hash;
+    private Signal m_reply_to;
+    //private Person m_recipient;
+    private ArrayList<Annotation> m_annotations;
+    private ArrayList<String> m_tags; // Tags class?
 
     public Signal() { }
 
@@ -48,10 +86,20 @@ public class Signal extends STObject
             {
                 m_date = new Date();
             }
-            m_userid = jobj.getInt("user_id");
-            m_fullname = jobj.getString("best_full_name");
+            m_signalid = jobj.getInt("signal_id");
+            m_sender = new Person();
+            m_sender.setId(jobj.getInt("user_id"));
+            m_sender.setFullname(jobj.getString("best_full_name"));
             m_uri = jobj.getString("uri");
             m_hash = jobj.getString("hash");
+
+            if (jobj.optJSONObject("in_reply_to") != null)
+            {
+                m_reply_to = new Signal(jobj.getJSONObject("in_reply_to").toString());
+            }
+
+            m_annotations = new ArrayList<Annotation>();
+            JSONArray anns = jobj.optJSONArray("annotations");
         }
         catch (JSONException e)
         {
@@ -68,7 +116,7 @@ public class Signal extends STObject
 
     public String toString()
     {
-        return String.format("\"%s\"\n\t-- %s (%s)", m_body, m_fullname,
+        return String.format("\"%s\"\n\t-- %s (%s)", m_body, m_sender.getFullname(),
                     new SimpleDateFormat("HH:mm:ss dd/MM/yyyy").format(m_date));
     }
 }
