@@ -103,7 +103,6 @@ public class dm_svc extends Service {
 				while (r) {
 					try {
 						
-						
 						if (init == false) {
 							pushRead(pushConnect());
 						}
