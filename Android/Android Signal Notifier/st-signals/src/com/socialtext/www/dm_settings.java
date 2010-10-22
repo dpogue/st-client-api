@@ -17,25 +17,17 @@ public class dm_settings extends Activity implements OnClickListener {
 	private String server;
 	private String username;
 	private String password;
-	private int poll;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dm_settings);
         
-		Spinner spinner_poll = (Spinner) findViewById(R.id.spinner_poll);
-
 		Button btnOk = (Button)findViewById(R.id.btn_ok);
 		Button btnCancel = (Button)findViewById(R.id.btn_cancel);
 
 		btnOk.setOnClickListener(this);
 		btnCancel.setOnClickListener(this);
-
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.ping_int, android.R.layout.simple_spinner_item);
-
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinner_poll.setAdapter(adapter);
 
 		getSettings();
 
@@ -46,7 +38,6 @@ public class dm_settings extends Activity implements OnClickListener {
 		switch(v.getId()){
 		case R.id.btn_ok:
 
-			Spinner spinner_poll = (Spinner) findViewById(R.id.spinner_poll);
 			TextView text_url = (TextView) findViewById(R.id.textbox_url);
 			TextView text_user = (TextView) findViewById(R.id.textbox_user);
 			TextView text_pass = (TextView) findViewById(R.id.textbox_password);
@@ -55,7 +46,6 @@ public class dm_settings extends Activity implements OnClickListener {
 			SharedPreferences.Editor editor = settings.edit();
 			
 			editor.putString("url", text_url.getText().toString());
-			editor.putInt("poll", spinner_poll.getSelectedItemPosition());
 			editor.putString("username", text_user.getText().toString());
 			editor.putString("password", text_pass.getText().toString());
 			
@@ -74,7 +64,6 @@ public class dm_settings extends Activity implements OnClickListener {
     
 	public void getSettings(){
 		
-		Spinner spinner_poll = (Spinner) findViewById(R.id.spinner_poll);
 		TextView text_url = (TextView) findViewById(R.id.textbox_url);
 		TextView text_user = (TextView) findViewById(R.id.textbox_user);
 		TextView text_pass = (TextView) findViewById(R.id.textbox_password);
@@ -84,13 +73,11 @@ public class dm_settings extends Activity implements OnClickListener {
 		server = settings.getString("url", "https://www.socialtext.com");
 		username = settings.getString("username", "Username");
 		password = settings.getString("password", "password");
-		poll = settings.getInt("poll", 3);
 		
 		
 		text_url.setText(server);
 		text_user.setText(username);
 		text_pass.setText(password);
-		spinner_poll.setSelection(poll);
 		
 	}
 

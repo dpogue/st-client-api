@@ -14,10 +14,11 @@ It can be installed using ADB or and application such as Astro File manager.
 *This will open up the browser with the mobile version of the signals showing.
 
 ==Caveats==
+*Uses the Push API but provides no real mechanism for syncronizing with the sequence number or timeouts.
 *To stop service you need a task manager or go into settings and running services to stop.
 *Does not use any API calls
 *Assumes that all messages before the start of the service have already been viewed.
-*Settings will change on the next update interval IE if you set 60min for poll time and then change it to 1min you will have to wait 60min before the settings will change. Unless of course you stop the service and restart it.
+*Settings change on next poll 
 *No settings for what signals you get. Any signal post after you start the service will be a notification.
 *You need to login in to the web browser when it opens which potentially means you have to login everytime you get a notifcation unless you select remember me.
 
