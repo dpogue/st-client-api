@@ -1,12 +1,13 @@
 package com.socialtext;
 
-import java.util.Date;
-import java.util.ArrayList;
+import com.socialtext.push.PushClient;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Date;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -21,6 +22,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -104,6 +106,7 @@ public class Resting
     private String m_password;
     private String m_workspace;
     private Mimetype m_default_mime = Mimetype.JSON; /* JSON by default */
+    private PushClient m_push_client;
 
     /**
      * Creates a Socialtext ReST connection.
@@ -229,7 +232,7 @@ public class Resting
             /* We need to set the request body here... */
             try
             {
-                StringEntity postbody = new StringEntity(data, "UTF-8");
+                StringEntity postbody = new StringEntity(data, HTTP.UTF_8);
                 ((HttpPost)httpreq).setEntity(postbody);
             }
             catch (UnsupportedEncodingException e)
@@ -245,6 +248,7 @@ public class Resting
         }
         httpreq.setHeader("Accept", accepttype.getType());
         httpreq.setHeader("Content-Type", contenttype.getType());
+
         httpclient.getCredentialsProvider().setCredentials(
                 new AuthScope(null, -1),
                 new UsernamePasswordCredentials(m_username, m_password));
@@ -321,6 +325,17 @@ public class Resting
         }
 
         return signals;
+    }
+
+    public ArrayList<Signal> pollSignals()
+    {
+        if (m_push_client == null) {
+            m_push_client = new PushClient(m_site_url, m_username, m_password);
+        }
+
+        m_push_client.fetch();
+
+        return null;
     }
 
     public ArrayList<Person> getPeople()

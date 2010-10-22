@@ -1,15 +1,11 @@
-
-import com.socialtext.Resting;
-import com.socialtext.Signal;
-//<<<<<<< HEAD
 import com.google.api.translate.Language;
 import com.google.api.translate.Translate;
-//=======
+import com.socialtext.Resting;
+import com.socialtext.Signal;
 import com.socialtext.Person;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-//>>>>>>> origin/master
 
 public class Test {
 
@@ -19,8 +15,10 @@ public class Test {
         String password = args[1];
 
         Resting r = new Resting(url, username, password);
+        
+        r.pollSignals();
 
-        ArrayList<Signal> sigs = r.getSignals();
+        /*ArrayList<Signal> sigs = r.getSignals();
 
         for (int i = 0; i < sigs.size(); i++) {
             System.out.println(sigs.get(i));
@@ -41,11 +39,6 @@ public class Test {
             r.postSignal(dox);
         } catch (Exception ex) {
             Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        // Testing a post
-        //Signal dox = new Signal();
-        //dox.setBody("Sending a signal from Java...");
-        //r.postSignal(dox);
+        }*/
     }
 }
