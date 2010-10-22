@@ -1,12 +1,14 @@
 package com.socialtext;
 
-import java.util.Date;
-import java.util.ArrayList;
+import com.socialtext.push.PushClient;
+import com.socialtext.push.PushObject;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Date;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -21,6 +23,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -38,6 +41,7 @@ public class Resting
         PEOPLE("/data/people"),
         PERSON("/data/people/%s"),
         PERSONTAG("/data/people/%s/tag"),
+        SIGNAL("/data/signals/%s"),
         SIGNALS("/data/signals"),
         TAGGEDPAGES("/data/workspaces/%s/tags/%s/pages"),
         WORKSPACE("/data/workspaces/%s"),
@@ -104,6 +108,7 @@ public class Resting
     private String m_password;
     private String m_workspace;
     private Mimetype m_default_mime = Mimetype.JSON; /* JSON by default */
+    private PushClient m_push_client;
 
     /**
      * Creates a Socialtext ReST connection.
@@ -229,7 +234,7 @@ public class Resting
             /* We need to set the request body here... */
             try
             {
-                StringEntity postbody = new StringEntity(data, "UTF-8");
+                StringEntity postbody = new StringEntity(data, HTTP.UTF_8);
                 ((HttpPost)httpreq).setEntity(postbody);
             }
             catch (UnsupportedEncodingException e)
@@ -245,6 +250,7 @@ public class Resting
         }
         httpreq.setHeader("Accept", accepttype.getType());
         httpreq.setHeader("Content-Type", contenttype.getType());
+
         httpclient.getCredentialsProvider().setCredentials(
                 new AuthScope(null, -1),
                 new UsernamePasswordCredentials(m_username, m_password));
@@ -269,6 +275,17 @@ public class Resting
             e.printStackTrace();
             return e.toString();
         }
+    }
+
+
+    public Signal getSignal(int id)
+    {
+        String path = String.format(Route.getRoute("SIGNAL"), ""+id);
+        String json = request(path, Method.GET, Mimetype.JSON,
+                        Mimetype.JSON, null);
+
+        Signal s = new Signal(json);
+        return s;
     }
 
     /**
@@ -300,7 +317,6 @@ public class Resting
     public ArrayList<Signal> getSignals(String request)
     {
         String path = Route.getRoute("SIGNALS") + request;
-        //System.out.println(path);
         String json = request(path, Method.GET, Mimetype.JSON,
                         Mimetype.JSON, null);
 
@@ -323,6 +339,31 @@ public class Resting
         return signals;
     }
 
+    /**
+     * Poll for incoming signals using the PUSH API.
+     * Note that this only sends a single request. You should loop if you want
+     * more continuous polling.
+     *
+     * @return An ArrayList populated with the retrieved signals, or null.
+     */
+    public ArrayList<Signal> pollSignals()
+    {
+        if (m_push_client == null) {
+            m_push_client = new PushClient(m_site_url, m_username, m_password);
+        }
+
+        ArrayList<PushObject> objs = m_push_client.fetch();
+        ArrayList<Signal> signals = new ArrayList<Signal>();
+
+        for (int i = 0; i < objs.size(); i++) {
+            if (objs.get(i).getObjClass().equals("signal")) {
+                signals.add(new Signal(objs.get(i).getObject().toString()));
+            }
+        }
+
+        return signals;
+    }
+
     public ArrayList<Person> getPeople()
     {
         return getPeople("");
@@ -331,7 +372,6 @@ public class Resting
     public ArrayList<Person> getPeople(String request)
     {
         String path = Route.getRoute("PEOPLE") + request;
-        //System.out.println(path);
         String json = request(path, Method.GET, Mimetype.JSON,
                         Mimetype.JSON, null);
 
