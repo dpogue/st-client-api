@@ -45,17 +45,45 @@ public class PushClient
         m_password = password;
     }
 
-    public void fetch()
+    public ArrayList<PushObject> fetch()
     {
         if (!m_init) {
             init();
         }
 
         if (m_init) {
-            String req = request("client_id=" + m_client_id + ";sequence=" + m_sequence);
+            try
+            {
+                String req = request("client_id=" + m_client_id + ";sequence=" + m_sequence);
+                JSONArray cmds = new JSONArray(req);
+                ArrayList<PushObject> objs = new ArrayList<PushObject>();
 
-            System.out.println(req);
+                for (int i = 0; i < cmds.length(); i++) {
+                    PushObject po = new PushObject(cmds.getJSONObject(i).toString());
+
+                    if (po.getObjClass().equals("command")) {
+                        String comm = po.getObject().getString("command");
+                        if (comm.equals("continue")) {
+                            m_sequence = po.getObject().optInt("sequence", m_sequence);
+                        } else if (comm.equals("goodbye")) {
+                            m_init = false;
+                        }
+                    } else if (po.getObjClass().equals("signal")) {
+                        objs.add(po);
+                    } else if (po.getObjClass().equals("hide_signal")) {
+                        objs.add(po);
+                    }
+                }
+
+                return objs;
+            }
+            catch (JSONException e)
+            {
+                return null;
+            }
         }
+
+        return null;
     }
 
     private void init()
@@ -73,7 +101,6 @@ public class PushClient
                         String comm = po.getObject().getString("command");
                         if (comm.equals("welcome")) {
                             m_client_id = po.getObject().getString("client_id");
-                            System.out.println(m_client_id);
                             m_init = true;
                         } else if (comm.equals("goodbye")) {
                             m_init = false;
@@ -133,7 +160,6 @@ public class PushClient
                 for (Cookie c : cookies.getCookies()) {
                     if (c.getName().equals("NLW-user")) {
                         m_push_cookie = c;
-                        System.out.println(c.toString());
                         return true;
                     }
                 }
@@ -169,7 +195,6 @@ public class PushClient
         HttpResponse response;
         HttpGet httpreq = new HttpGet(uri);
         httpreq.setHeader("Accept", "application/json");
-        //httpreq.setHeader("Content-Type", contenttype.getType());
 
         httpclient.getCookieStore().addCookie(m_push_cookie);
 

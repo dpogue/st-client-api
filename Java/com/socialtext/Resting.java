@@ -1,6 +1,7 @@
 package com.socialtext;
 
 import com.socialtext.push.PushClient;
+import com.socialtext.push.PushObject;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -40,6 +41,7 @@ public class Resting
         PEOPLE("/data/people"),
         PERSON("/data/people/%s"),
         PERSONTAG("/data/people/%s/tag"),
+        SIGNAL("/data/signals/%s"),
         SIGNALS("/data/signals"),
         TAGGEDPAGES("/data/workspaces/%s/tags/%s/pages"),
         WORKSPACE("/data/workspaces/%s"),
@@ -275,6 +277,17 @@ public class Resting
         }
     }
 
+
+    public Signal getSignal(int id)
+    {
+        String path = String.format(Route.getRoute("SIGNAL"), ""+id);
+        String json = request(path, Method.GET, Mimetype.JSON,
+                        Mimetype.JSON, null);
+
+        Signal s = new Signal(json);
+        return s;
+    }
+
     /**
      * Posts a signal to the socialtext stream.
      *
@@ -304,7 +317,6 @@ public class Resting
     public ArrayList<Signal> getSignals(String request)
     {
         String path = Route.getRoute("SIGNALS") + request;
-        //System.out.println(path);
         String json = request(path, Method.GET, Mimetype.JSON,
                         Mimetype.JSON, null);
 
@@ -327,15 +339,29 @@ public class Resting
         return signals;
     }
 
+    /**
+     * Poll for incoming signals using the PUSH API.
+     * Note that this only sends a single request. You should loop if you want
+     * more continuous polling.
+     *
+     * @return An ArrayList populated with the retrieved signals, or null.
+     */
     public ArrayList<Signal> pollSignals()
     {
         if (m_push_client == null) {
             m_push_client = new PushClient(m_site_url, m_username, m_password);
         }
 
-        m_push_client.fetch();
+        ArrayList<PushObject> objs = m_push_client.fetch();
+        ArrayList<Signal> signals = new ArrayList<Signal>();
 
-        return null;
+        for (int i = 0; i < objs.size(); i++) {
+            if (objs.get(i).getObjClass().equals("signal")) {
+                signals.add(new Signal(objs.get(i).getObject().toString()));
+            }
+        }
+
+        return signals;
     }
 
     public ArrayList<Person> getPeople()
@@ -346,7 +372,6 @@ public class Resting
     public ArrayList<Person> getPeople(String request)
     {
         String path = Route.getRoute("PEOPLE") + request;
-        //System.out.println(path);
         String json = request(path, Method.GET, Mimetype.JSON,
                         Mimetype.JSON, null);
 
