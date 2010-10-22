@@ -71,11 +71,34 @@ public class Signal extends STObject
         m_body = body;
     }
 
+    public int getID()
+    {
+        return m_signalid;
+    }
+
+    public int getReplyID()
+    {
+        if (m_reply_to != null)
+        {
+            return m_reply_to.getID();
+        }
+        else
+        {
+            return -1;
+        }
+    }
+
+    public void setReply(Signal reply)
+    {
+        m_reply_to = reply;
+    }
+
     public void fromJSON(String json)
     {
         try
         {
             JSONObject jobj = new JSONObject(json);
+            m_signalid = jobj.getInt("signal_id");
             m_body = jobj.getString("body");
             try
             {
@@ -86,7 +109,6 @@ public class Signal extends STObject
             {
                 m_date = new Date();
             }
-            m_signalid = jobj.getInt("signal_id");
             m_sender = new Person();
             m_sender.setId(jobj.getInt("user_id"));
             m_sender.setFullname(jobj.getString("best_full_name"));
@@ -95,7 +117,9 @@ public class Signal extends STObject
 
             if (jobj.optJSONObject("in_reply_to") != null)
             {
-                m_reply_to = new Signal(jobj.getJSONObject("in_reply_to").toString());
+                m_reply_to = new Signal();
+                m_reply_to.m_signalid = jobj.getJSONObject("in_reply_to").getInt("signal_id");
+                m_reply_to.m_uri = jobj.getJSONObject("in_reply_to").getString("uri");
             }
 
             m_annotations = new ArrayList<Annotation>();
@@ -110,6 +134,13 @@ public class Signal extends STObject
     {
         JSONObject jobj = new JSONObject();
         jobj.put("signal", m_body);
+
+        if (m_reply_to != null)
+        {
+            JSONObject reply = new JSONObject();
+            reply.put("signal_id", m_reply_to.getID());
+            jobj.put("in_reply_to", reply);
+        }
 
         return jobj.toString();
     }

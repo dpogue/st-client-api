@@ -24,7 +24,7 @@
         </pathconvert>
         <jar destfile="build/jar/Socialtext.jar">
             <manifest>
-                <attribute name="Main-Class" value="PostSignal" />
+                <attribute name="Main-Class" value="TranslateBot" />
                 <attribute name="Class-Path" value="${jar.classpath}" />
             </manifest>
             <fileset dir="build/classes" />
