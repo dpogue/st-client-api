@@ -162,7 +162,7 @@ public class dm_svc extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 
-		Toast.makeText(this, "SocialText Signals Stopped", Toast.LENGTH_LONG)
+		Toast.makeText(this, "Socialtext Signals Stopped", Toast.LENGTH_LONG)
 				.show();
 
 	}
@@ -320,7 +320,7 @@ public class dm_svc extends Service {
 
 		String ns = Context.NOTIFICATION_SERVICE;
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
-		CharSequence contentTitle = "SocialText Signals";
+		CharSequence contentTitle = "Socialtext Signals";
 		CharSequence contentText = "";
 
 		// Open the browser on message selection
