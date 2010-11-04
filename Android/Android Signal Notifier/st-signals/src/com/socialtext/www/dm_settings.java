@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class dm_settings extends Activity implements OnClickListener {
 	
@@ -52,6 +53,7 @@ public class dm_settings extends Activity implements OnClickListener {
 			editor.commit();
 			
 			startService(new Intent(dm_settings.this, dm_svc.class));
+			Toast.makeText(this, "Settings Saved", Toast.LENGTH_LONG).show();
 
 			finish();
 			break;

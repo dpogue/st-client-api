@@ -1,0 +1,79 @@
+==Socialtext Java API Examples==
+
+This document will provide some basic examples needed to get started using the Socialtext Java API.
+
+Some complete examples can be found [https://github.com/dvpdiner2/st-client-api/tree/master/Java/examples/ here]
+
+
+===Initialize the REST Object===
+
+Before you start anything the settings need to be set you do this with
+<syntaxhighlight lang="java">
+
+String url = "https://developers.socialtext.net";
+String username = "Username";
+String password = "Password";
+
+Resting r = new Resting(url, username, password);
+
+</syntaxhighlight>   
+
+This will setup the resting object with the proper credentials and website url.
+
+
+===Posting a Signal===
+
+Posting a signal to all groups is quite simple
+<syntaxhighlight lang="java">
+
+Resting r = new Resting(url, username, password);
+
+Signal sig = new Signal();
+sig.setBody("Posting a Signal!");
+r.postSignal(sig);
+        
+</syntaxhighlight> 
+
+
+===Getting All Signals===
+
+This code block get all signals and display them to standard out
+<syntaxhighlight lang="java">
+
+Resting r = new Resting(url, username, password);
+
+ArrayList<Signal> sigs = r.getSignals();
+
+for (int i = 0; i < sigs.size(); i++) {
+    System.out.println(sigs.get(i));
+}
+        
+</syntaxhighlight> 
+
+
+===Getting Signals with a query===
+
+If you wish to get only signals before or after a certain time you can use the SignalBuilder.
+<syntaxhighlight lang="java">
+
+Resting r = new Resting(url, username, password);
+
+//Date object for 12:30 October 10th 2010
+Date d = new Date(2010,10,10,12,30);
+
+SignalBuilder sb = New SignalBuilder();
+String query = "?" + sb.after(d) + "&" + sb.orderDesc();
+
+ArrayList<Signal> sigs = r.getSignals(query);
+
+for (int i = 0; i < sigs.size(); i++) {
+    System.out.println(sigs.get(i));
+}
+        
+</syntaxhighlight> 
+
+This code will get all signals posted after 12:30 10/10/10 then order them descending and print to standard out.
+*Note that any valid query can be built by hand. See the [https://www.socialtext.net/st-rest-docs/index.cgi?data_signals#filtering_get REST documentation] for valid query strings.
+
+
+

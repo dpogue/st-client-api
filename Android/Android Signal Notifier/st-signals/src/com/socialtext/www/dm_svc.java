@@ -113,6 +113,7 @@ public class dm_svc extends Service {
 						Log.v("Data", response.toString());
 						
 						getSettings(); // update settings if they've changed
+						Thread.sleep(300000);
 
 					} catch (Throwable e) {
 						e.printStackTrace();
@@ -311,9 +312,7 @@ public class dm_svc extends Service {
 				"New Signal Received", System.currentTimeMillis());
 
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
-		notification.flags |= Notification.DEFAULT_VIBRATE;
-		notification.flags |= Notification.DEFAULT_SOUND;
-
+		notification.defaults |= Notification.DEFAULT_ALL;
 	}
 
 	private void showNotification() {
