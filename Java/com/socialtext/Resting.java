@@ -57,16 +57,19 @@ public class Resting
 
         private String m_path;
 
+        /** set path */
         private Route(String path)
         {
             m_path = path;
         }
 
+        /** gets path */
         public String getPath()
         {
             return m_path;
         }
 
+        /** gets route */
         public static String getRoute(String name)
             throws IllegalArgumentException
         {
@@ -278,6 +281,11 @@ public class Resting
     }
 
 
+    /** Gets a signal from social text
+     *  /data/signals/%s where %s is the id of the person 
+     *
+     * @param id The id of the person
+     */
     public Signal getSignal(int id)
     {
         String path = String.format(Route.getRoute("SIGNAL"), ""+id);
@@ -309,11 +317,19 @@ public class Resting
         }
     }
 
+    /**
+     * calls ArrayList<Signal> getSignals(String request)
+     */
     public ArrayList<Signal> getSignals()
     {
         return getSignals("");
     }
 
+    /**
+     *  Returns Array of all signals
+     * @param request
+     * @return Array of signals
+     */
     public ArrayList<Signal> getSignals(String request)
     {
         String path = Route.getRoute("SIGNALS") + request;
@@ -364,11 +380,13 @@ public class Resting
         return signals;
     }
 
+    /** calls ArrayList<Person> getPeople(String request) */
     public ArrayList<Person> getPeople()
     {
         return getPeople("");
     }
 
+    /** returns an ArrayList of all people */
     public ArrayList<Person> getPeople(String request)
     {
         String path = Route.getRoute("PEOPLE") + request;
