@@ -72,6 +72,12 @@ namespace Socialtext
             }
         }
 
+        public Person Person
+        {
+            get { return fPerson; }
+            set { fPerson = value; }
+        }
+
         public static List<Signal> Get(RestClient rest)
         {
             return Get(rest, String.Empty);

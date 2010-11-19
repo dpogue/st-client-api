@@ -24,7 +24,7 @@ namespace Socialtext.Client
 
             this.BackColor = Color.White;
             this.AutoSize = true;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowOnly;
 
             this.ColumnCount = 3;
             this.ColumnStyles.Clear();
@@ -40,7 +40,7 @@ namespace Socialtext.Client
             PictureBox photo = new PictureBox();
             photo.Height = 64;
             photo.Width = 64;
-            photo.BackColor = Color.Blue;
+            photo.Image = fSignal.Person.GetPhoto(SignalsForm.Client);
 
             Label username = new Label();
             username.Text = fSignal.BestFullName;
