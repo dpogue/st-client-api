@@ -42,14 +42,13 @@ public class dm_show extends ListActivity {
 
 		getSettings(); // update settings if they've changed
 		activityOpen = true;
+		init_listview();
 		
 		if(!open_first){
 			startActivity(new Intent(this, dm_settings.class));
 		}
 
-		start_Service();
-		init_listview();
-		
+		start_Service();		
 		checkNewData(); //Fire off a thread to check for new data
 		
 	}

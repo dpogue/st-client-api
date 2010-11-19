@@ -19,6 +19,7 @@
         android:layout_toRightOf="@id/icon"
         android:layout_alignParentRight="true"
         android:paddingLeft="6dip"
+        android:text="25dip"
         android:gravity="center_vertical"/>
         
 </RelativeLayout>
