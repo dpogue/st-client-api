@@ -10,6 +10,7 @@ public class PushObject extends STObject
     private String m_class;
     private JSONObject m_object;
 
+    /** json object used to create the incoming push object */
     public PushObject(String json)
     {
         fromJSON(json);

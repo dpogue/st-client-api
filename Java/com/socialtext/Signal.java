@@ -56,26 +56,31 @@ public class Signal extends STObject
 
     public Signal() { }
 
+    /** creates signal constructor from json object */
     public Signal(String json)
     {
         fromJSON(json);
     }
 
+    /** gets body of signal */
     public String getBody()
     {
         return m_body;
     }
 
+    /** sets body of signal */
     public void setBody(String body)
     {
         m_body = body;
     }
 
+    /** sets id of signal */
     public int getID()
     {
         return m_signalid;
     }
 
+    /** sets reply to id */
     public int getReplyID()
     {
         if (m_reply_to != null)
@@ -88,11 +93,13 @@ public class Signal extends STObject
         }
     }
 
+    /** sets Reply of signal */
     public void setReply(Signal reply)
     {
         m_reply_to = reply;
     }
 
+    /** Sets all signal info from json object */
     public void fromJSON(String json)
     {
         try
@@ -130,6 +137,7 @@ public class Signal extends STObject
         }
     }
 
+    /** sets json object */
     public String toJSON() throws JSONException
     {
         JSONObject jobj = new JSONObject();
@@ -145,6 +153,7 @@ public class Signal extends STObject
         return jobj.toString();
     }
 
+    /** prints out all signal info */
     public String toString()
     {
         return String.format("\"%s\"\n\t-- %s (%s)", m_body, m_sender.getFullname(),

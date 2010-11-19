@@ -38,6 +38,9 @@ public class PushClient
     private String m_client_id;
     private boolean m_init = false;
 
+    /**
+     * Creates info needed for push client 
+     */
     public PushClient(String url, String username, String password)
     {
         m_site_url = url;
@@ -45,6 +48,7 @@ public class PushClient
         m_password = password;
     }
 
+    /** An ArrayList populated with the retrieved signals, or null. */
     public ArrayList<PushObject> fetch()
     {
         if (!m_init) {
