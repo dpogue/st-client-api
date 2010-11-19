@@ -6,3 +6,8 @@
 .\#*
 Java/build/*
 Java/doc/*
+bin/
+obj/
+Debug/
+Release/
+*.suo
