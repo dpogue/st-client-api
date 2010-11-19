@@ -16,6 +16,11 @@
         <javac srcdir="." destdir="build/classes" classpathref="classpath" includeantruntime="false" />
     </target>
 
+    <target name="javadoc">
+        <javadoc sourcepath="." destdir="doc/api" use="true">
+        </javadoc>
+    </target>
+
     <target name="jar" depends="compile">
         <mkdir dir="build/jar" />
         <pathconvert property="jar.classpath" pathsep=" ">

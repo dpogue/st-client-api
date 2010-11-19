@@ -1,4 +1,16 @@
 routes = dict(
+
+    push                 = '/data/push',
+
+    signals              = '/data/signals',
+    signal               = '/data/signals/%(hash_or_id)s',
+
+    user                 = '/data/users/%(user_id)s',
+    usergroups           = '/data/users/%(user_id)s/groups',
+    users                = '/data/users',
+
+    version              = '/data/version',
+
     backlinks            = '/data/workspaces/%(ws)s/pages/%(pname)s/backlinks',
     breadcrumbs          = '/data/workspaces/%(ws)s/breadcrumbs',
     frontlinks           = '/data/workspaces/%(ws)s/pages/%(pname)/frontlinks',
@@ -18,6 +30,5 @@ routes = dict(
     workspaceattachments = '/data/workspaces/%(ws)s/attachments',
     workspaceuser        = '/data/workspaces/%(ws)s/users/%(user_id)s',
     workspaceusers       = '/data/workspaces/%(ws)s/users',
-    user                 = '/data/users/%(user_id)s',
-    users                = '/data/users')
+)
 

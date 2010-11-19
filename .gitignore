@@ -1,6 +1,8 @@
 *.class
 *.swp
+*.pyc
 *~
 \#*
 .\#*
 Java/build/*
+Java/doc/*
