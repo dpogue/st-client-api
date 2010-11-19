@@ -1,0 +1,38 @@
+==README==
+
+Author: Terence Stenvold 2010 
+
+The code in st-signals-app is for Android devices 2.2 but should run on devices 1.5 and up.
+If you want to test the could look for the .apk in the bin folder. This apk is not signed so you will need to enable "Unknown Sources" in your phones settings.
+
+It can be installed using ADB or and application such as Astro File manager.
+
+==Usage==
+*If opening for the first time a Settings window will be show.
+*Once settings saved you will be shown the main screen which acts similarly to 
+    the default sms application.
+
+==Caveats==
+*Cannot reply to threads only Post new ones
+*Cannot post to multiple groups
+*Possibility of issues after changing settings while the service is running 
+*Some of the buttons appear to be unresponsive this is caused by doing operations
+    inside the UI thread and need to be wrapped in their own thread
+
+
+Copyright and License
+=============================================================================
+
+Copyright 2010 Terence Stenvold.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file or any other file under this directory except in compliance with
+the License. You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations
+under the License. 

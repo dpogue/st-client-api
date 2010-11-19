@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent">
+    
+    <RelativeLayout 
+    	xmlns:android="http://schemas.android.com/apk/res/android"	
+        android:id="@+id/InnerRelativeLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#555"
+        android:padding="6dip">
+
+        <Button 
+            android:text="Post" 
+            android:id="@+id/Button"
+            android:layout_alignParentRight="true" 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </Button>
+
+        <EditText 
+            android:id="@+id/EditText" 
+            android:layout_width="fill_parent"
+            android:layout_toLeftOf="@id/Button"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:maxLength="400">
+        </EditText>
+
+    </RelativeLayout>
+    
+   	    <LinearLayout android:id="@+id/layout"
+            android:layout_above="@id/InnerRelativeLayout"
+            android:layout_width="wrap_content"
+	        android:layout_height="fill_parent">
+	        <ListView android:id="@+id/dm_post_listview"
+	            android:layout_height="fill_parent"
+	            android:layout_width="fill_parent"
+	            android:headerDividersEnabled="false"
+	            android:footerDividersEnabled="false"
+	            android:divider="#FFF"
+	            android:dividerHeight="0dip">
+	        </ListView>
+	    </LinearLayout>
+
+</RelativeLayout>
