@@ -18,7 +18,6 @@ public class dm_show_data {
 	private final static String TIME = "TIME";
 	private final static String REPLY = "REPLY";
 	
-	
 	private HashMap<String, Bitmap> pics = new HashMap<String, Bitmap>();
 	private ArrayList<Map<String, Object>> signals = new ArrayList<Map<String, Object>>();
 	

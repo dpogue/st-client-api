@@ -99,16 +99,11 @@ public class dm_show extends ListActivity {
 		    	getSettings();
 		        return true;
 		    case R.id.menu_clear:
-		    	Thread t = new Thread() {
-		    		public void run() {
-				    	d.removeAllData();
-				    	init_listview();
-		    		}
-		    	};
-		    	t.start();
+		    	d.removeAllData();
+		    	init_listview();
 		    	return true;
-	    default:
-	        return super.onOptionsItemSelected(item);
+		    default:
+		        return super.onOptionsItemSelected(item);
 	    }
 	}
 	
