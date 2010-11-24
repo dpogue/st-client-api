@@ -11,22 +11,42 @@ except ImportError:
     from BaseHTTPServer import HTTPServer
 
 import httplib2
-import configparser
-#import SocketServer
+import cgi
+try:
+    from configparser import ConfigParser
+except ImportError:
+    from ConfigParser import ConfigParser
 
-config = configparser.ConfigParser()
+config = ConfigParser()
 config.read(['webhook.conf'])
+
+location = ''
 
 class WebHookHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         print('POST')
-        print(self.rfile.read())
+        try:
+            fs = cgi.FieldStorage(
+                    fp = self.rfile,
+                    headers = self.headers,
+                    environ = {
+                        'REQUEST_METHOD': 'POST',
+                        'CONTENT_TYPE': self.headers['Content-Type']
+                    })
+
+            if 'json_payload' not in fs:
+                print('*** Error: No JSON payload with request!')
+                self.send_error(500)
+            print('%s' % fs['json_payload'].value)
+        except:
+            print('Problem reading data')
+            self.send_error(500)
 
     def do_GET(self):
-        print('GET')
-        print(self.rfile.read())
+        self.send_error(404)
 
 def register_hook():
+    global location
     username = config.get('Socialtext', 'Username')
     password = config.get('Socialtext', 'Password')
     server = config.get('Socialtext', 'Host')
@@ -38,8 +58,6 @@ def register_hook():
         server = 'https://' + server
     else:
         server = 'http://' + server
-
-    print(server)
 
     host = config.get('Webhook', 'Host')
     port = config.getint('Webhook', 'Port')
@@ -53,8 +71,6 @@ def register_hook():
     else:
         host = 'http://' + host
 
-    print(host)
-
     h = httplib2.Http()
     h.add_credentials(username, password)
 
@@ -67,7 +83,29 @@ def register_hook():
     resp, content = h.request('%s/data/webhooks' % server,
             'POST', body = json.dumps(fields),
             headers = { 'content-type': 'application/json'} )
-    print(resp)
+    location = resp['location']
+    print('*** Registered webhook at %s' % location)
+
+def unregister_hook():
+    global location
+    username = config.get('Socialtext', 'Username')
+    password = config.get('Socialtext', 'Password')
+    server = config.get('Socialtext', 'Host')
+    secure = config.getboolean('Socialtext', 'Secure')
+
+    if secure:
+        server = 'https://' + server
+    else:
+        server = 'http://' + server
+
+    h = httplib2.Http()
+    h.add_credentials(username, password)
+
+
+    resp, content = h.request('%s%s' % (server, location), 'DELETE')
+    print('*** Unregistered webhook')
+
+    location = ''
 
 def run_server():
     server = config.get('Server', 'Host')
@@ -80,6 +118,7 @@ def run_server():
     except KeyboardInterrupt:
         pass
     httpd.server_close()
+    unregister_hook()
 
 if __name__== '__main__':
     run_server()
