@@ -17,33 +17,83 @@ try:
 except ImportError:
     from ConfigParser import ConfigParser
 
+# RSS Example
+from dict2rss import dict2rss
+import iso8601
+
 config = ConfigParser()
 config.read(['webhook.conf'])
 
 location = ''
+signals = {}
+rss = ''
+need_refresh = True
 
 class WebHookHandler(BaseHTTPRequestHandler):
     def do_POST(self):
-        print('POST')
-        try:
-            fs = cgi.FieldStorage(
-                    fp = self.rfile,
-                    headers = self.headers,
-                    environ = {
-                        'REQUEST_METHOD': 'POST',
-                        'CONTENT_TYPE': self.headers['Content-Type']
-                    })
+        global signals
+        global need_refresh
 
-            if 'json_payload' not in fs:
-                print('*** Error: No JSON payload with request!')
-                self.send_error(500)
-            print('%s' % fs['json_payload'].value)
-        except:
-            print('Problem reading data')
+        print('POST')
+        #try:
+        fs = cgi.FieldStorage(
+                fp = self.rfile,
+                headers = self.headers,
+                environ = {
+                    'REQUEST_METHOD': 'POST',
+                    'CONTENT_TYPE': self.headers['Content-Type']
+                })
+
+        if 'json_payload' not in fs:
+            print('*** Error: No JSON payload with request!')
             self.send_error(500)
+        print('%s' % fs['json_payload'].value)
+        payload = json.loads(fs['json_payload'].value)
+        print(payload)
+        need_refresh = True
+        rss_post = {
+            'title': payload['best_full_name'],
+            'description': payload['body'],
+            'pubDate': iso8601.parse_date(str(payload['at'])).strftime('%a, %d %b %Y %H:%M:%S %z'),
+            'guid': payload['hash']
+        }
+        signals[payload['hash']] = rss_post
+        #except:
+        #    print('Problem reading data')
+        #    self.send_error(500)
 
     def do_GET(self):
-        self.send_error(404)
+        global need_refresh
+        global rss
+        global items
+        global signals
+
+        #self.send_error(404)
+
+        if need_refresh:
+            need_refresh = False
+            url = config.get('Socialtext', 'Host')
+            if config.getboolean('Socialtext', 'Secure'):
+                url = 'https://' + url
+            else:
+                url = 'http://' + url
+
+            rss_data = {
+                'title': 'Socialtext Signals',
+                'version': '2.0',
+                'description': 'Socialtext signal updates',
+                'link': url,
+
+                'item': signals
+            }
+            d2r = dict2rss(rss_data)
+            d2r.PrettyPrint()
+            rss = d2r.output()
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/xml')
+        self.end_headers()
+        self.wfile.write(rss.encode('utf8'))
+
 
 def register_hook():
     global location
@@ -103,7 +153,7 @@ def unregister_hook():
 
 
     resp, content = h.request('%s%s' % (server, location), 'DELETE')
-    print('*** Unregistered webhook')
+    print('\n*** Unregistered webhook')
 
     location = ''
 
