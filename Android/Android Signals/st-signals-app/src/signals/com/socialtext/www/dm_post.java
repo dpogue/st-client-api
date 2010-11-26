@@ -7,6 +7,7 @@ import java.util.Map;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,8 +25,11 @@ import android.widget.TextView;
 
 public class dm_post extends Activity implements OnClickListener{
 
+	private static final String NAME = "NAME";
 	private static final String BODY = "BODY";
 	private static final String ICON = "ICON";
+	private static final String AUTH_ID = "AUTH_ID";
+	private static final String ID = "ID";
 	
 	private AlertDialog alert;
 	private ArrayList<String> groups_dlg;
@@ -33,6 +37,8 @@ public class dm_post extends Activity implements OnClickListener{
 	ArrayList<Map<String, Object>> drawables;
 	private SimpleAdapter adapter;
 	final Handler mHandler = new Handler();
+	private int reply_to; 
+	private Map<String, Object> reply;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +56,13 @@ public class dm_post extends Activity implements OnClickListener{
 	private void init_listview(){
 		
 		ListView lv = (ListView)findViewById(R.id.dm_post_listview);
+		Intent i = this.getIntent();		
+		reply_to = i.getIntExtra("reply_to", 0);
+		
+		if(reply_to > 0){
+			reply = dm_show.d.getSignal(reply_to);
+			d.addData(reply.get(AUTH_ID).toString(), reply.get(BODY).toString(), reply.get(NAME).toString());
+		}
 		
 		drawables = d.getData();
 
@@ -98,8 +111,10 @@ public class dm_post extends Activity implements OnClickListener{
     			d.addData(dm_svc.request.id, body, "Me");
     			mHandler.post(mUpdateResults);
     			
-    			
-    			if(groups_dlg.size() > 0){
+    			if(reply_to > 0){
+    				dm_svc.request.postReply(body, reply.get(ID).toString());
+    			}
+    			else if(groups_dlg.size() > 0){
     				dm_svc.request.postSignal(body, groups_dlg);
     			}
     			else{

@@ -51,6 +51,11 @@ public class dm_show_data {
 		return signals;
 	}
 	
+	public Map<String, Object> getSignal(int id){
+		
+		return signals.get(id);
+	}
+	
 	public Bitmap getIcon(String id){
 		return pics.get(id);
 	}

@@ -199,7 +199,15 @@ public class dm_request{
      */
     public void postSignal(String body){
         String path = "/data/signals";
-        String sig = "{ \"signal\": \" " + body + "\"}";
+        String sig = "{ \"signal\":\"" + body + "\"}";
+
+        request(path, Method.POST, Mimetype.JSON, Mimetype.JSON, sig, false);
+    }
+    
+    public void postReply(String body, String reply_to){
+        String path = "/data/signals";
+        String reply = "{ \"signal_id\":\"" + reply_to + "\"}";
+        String sig = "{ \"signal\": \"" + body + "\",\"in_reply_to\":" + reply + "}";
 
         request(path, Method.POST, Mimetype.JSON, Mimetype.JSON, sig, false);
     }
@@ -214,7 +222,7 @@ public class dm_request{
         
         Log.v("Groups: ", groups.toString());
         
-        String sig = "{ \"signal\": \" " + body + "\", \"group_ids\":"+ groups +"}";
+        String sig = "{ \"signal\":\"" + body + "\", \"group_ids\":"+ groups +"}";
         request(path, Method.POST, Mimetype.JSON, Mimetype.JSON, sig, false);
     }
     

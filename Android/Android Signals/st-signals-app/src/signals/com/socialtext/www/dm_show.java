@@ -180,11 +180,11 @@ public class dm_show extends ListActivity {
 	}
 
 	public void onListItemClick(ListView parent, View v, int position, long id) {
-		switch(parent.getCheckedItemPosition()){
-				//get selected Item data and process and past to dm_post to be displayed
+		switch(position){
 			default:
-				startActivity(new Intent(this, dm_post.class));
-				start_Service();
+				Intent i = new Intent(this, dm_post.class);
+				i.putExtra("reply_to", position);
+				startActivity(i);
 				break;
 		}
 	}

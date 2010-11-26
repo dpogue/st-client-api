@@ -58,7 +58,7 @@ public class dm_svc extends Service {
 						pushRead(response);
 						Log.v("Data: ",response.toString());
 												
-						Thread.sleep(300000); //5 min poll on the pushd
+						//Thread.sleep(300000); //5 min poll on the pushd
 
 					} catch (Throwable e) {
 						e.printStackTrace();
