@@ -37,6 +37,7 @@ namespace Socialtext.Client
                 foreach (Signal s in sigs)
                 {
                     SignalPanel sp = new SignalPanel(s);
+                    sp.Width = this.flowLayoutPanel1.Width - 30;
                     sp.MinimumSize = new Size(this.flowLayoutPanel1.Width - 30, 64);
                     sp.MaximumSize = new Size(this.flowLayoutPanel1.Width - 30, 300);
                     this.flowLayoutPanel1.Controls.Add(sp);
