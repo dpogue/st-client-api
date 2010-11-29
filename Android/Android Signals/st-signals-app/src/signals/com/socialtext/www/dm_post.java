@@ -39,14 +39,16 @@ public class dm_post extends Activity implements OnClickListener{
 	final Handler mHandler = new Handler();
 	private int reply_to; 
 	private Map<String, Object> reply;
+	private Button btnPost;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dm_post);
+		this.setTitle(R.string.post_name);
 		groups_dlg = new ArrayList<String>();
 		
-		Button btnPost = (Button) findViewById(R.id.Button);
+		btnPost = (Button) findViewById(R.id.Button);
 		btnPost.setOnClickListener(this);
 		
 		init_listview();
@@ -60,6 +62,11 @@ public class dm_post extends Activity implements OnClickListener{
 		reply_to = i.getIntExtra("reply_to", 0);
 		
 		if(reply_to > 0){
+			lv.setDividerHeight(0);
+			lv.setHeaderDividersEnabled(false);
+			lv.setFooterDividersEnabled(false);
+			this.setTitle(R.string.reply_name);
+			btnPost.setText(R.string.reply);
 			reply = dm_show.d.getSignal(reply_to);
 			d.addData(reply.get(AUTH_ID).toString(), reply.get(BODY).toString(), reply.get(NAME).toString());
 		}
