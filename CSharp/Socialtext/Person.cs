@@ -12,8 +12,8 @@ namespace Socialtext
     {
         private UInt32 fPersonID;
         private String fBestFullName;
-        private String fSortKey;
 
+        private static readonly object sync = new object();
         private static Dictionary<UInt32, Image> fPhotos = new Dictionary<UInt32, Image>(); 
 
         public UInt32 PersonID
@@ -30,9 +30,19 @@ namespace Socialtext
 
         public Image GetPhoto(RestClient rest)
         {
-            if (fPhotos.ContainsKey(fPersonID))
+            Image ret = null;
+
+            lock (sync)
             {
-                return fPhotos[fPersonID];
+                if (fPhotos.ContainsKey(fPersonID))
+                {
+                    ret = fPhotos[fPersonID];
+                }
+            }
+
+            if (ret != null)
+            {
+                return ret;
             }
 
             StringBuilder url = new StringBuilder(rest.Host);
@@ -52,11 +62,22 @@ namespace Socialtext
             req.Headers["Authorization"] = "Basic " + Convert.ToBase64String(
                     Encoding.UTF8.GetBytes(rest.Username + ":" + rest.Password));
 
-            HttpWebResponse response = (HttpWebResponse)req.GetResponse();
+            try
+            {
+                HttpWebResponse response = (HttpWebResponse)req.GetResponse();
 
-            fPhotos.Add(fPersonID, Image.FromStream(response.GetResponseStream()));
+                lock (sync)
+                {
+                    fPhotos.Add(fPersonID, Image.FromStream(response.GetResponseStream()));
+                    ret = fPhotos[fPersonID];
+                }
 
-            return fPhotos[fPersonID];
+                return ret;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
