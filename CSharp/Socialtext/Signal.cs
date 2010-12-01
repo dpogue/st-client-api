@@ -12,13 +12,14 @@ namespace Socialtext
     public class Signal
     {
         private String fBody;
-        private DateTime fDate;
+        private DateTime fDate = DateTime.Now;
         private Int32 fSignalID;
         private String fURI;
         private String fHash;
         private Person fPerson;
+        private Signal fInReplyTo;
 
-        [DataMember(Name="body")]
+        [DataMember(Name="body", IsRequired = false)]
         public String Body
         {
             get { return fBody; }
@@ -72,6 +73,26 @@ namespace Socialtext
             }
         }
 
+        [DataMember(Name = "in_reply_to", IsRequired = false, EmitDefaultValue = false)]
+        public Signal InReplyTo
+        {
+            get { return fInReplyTo; }
+            set { fInReplyTo = value; }
+        }
+
+        [DataMember(Name = "at", IsRequired = false, EmitDefaultValue = true)]
+        public String At
+        {
+            get { return fDate.ToLongTimeString(); }
+            set { fDate = DateTime.Parse(value); }
+        }
+
+        public DateTime Date
+        {
+            get { return fDate; }
+            set { fDate = value; }
+        }
+
         public Person Person
         {
             get { return fPerson; }
@@ -108,6 +129,11 @@ namespace Socialtext
 
             DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(Signal[]));
             Signal[] signals = (Signal[])json.ReadObject(response.GetResponseStream());
+
+            foreach (Signal s in signals)
+            {
+                s.Person.GetPhoto(rest);
+            }
 
             return new List<Signal>(signals);
         }

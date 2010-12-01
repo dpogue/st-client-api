@@ -3,7 +3,8 @@
     <string name="app_name">Socialtext Signals</string>
     <string name="post_name">Post a Signal</string>
     <string name="reply_name">Reply to a Signal</string>
-	<string name="post">Post</string>
+	<string name="post">New Post</string>
+	<string name="reply">Reply</string>
 	<string name="signals">Signals</string>
 	<string name="username">Username</string>
 	<string name="password">Password</string>

@@ -39,5 +39,10 @@ namespace Socialtext
             fUsername = username;
             fPassword = password;
         }
+
+        public PushClient GetPushClient()
+        {
+            return new PushClient(fHost, fUsername, fPassword);
+        }
     }
 }

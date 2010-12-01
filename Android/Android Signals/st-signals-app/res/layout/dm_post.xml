@@ -14,7 +14,7 @@
         android:padding="6dip">
 
         <Button 
-            android:text="Post" 
+            android:text="@string/post" 
             android:id="@+id/Button"
             android:layout_alignParentRight="true" 
             android:layout_width="wrap_content"
@@ -39,10 +39,7 @@
 	        <ListView android:id="@+id/dm_post_listview"
 	            android:layout_height="fill_parent"
 	            android:layout_width="fill_parent"
-	            android:headerDividersEnabled="false"
-	            android:footerDividersEnabled="false"
-	            android:divider="#FFF"
-	            android:dividerHeight="0dip">
+	            >
 	        </ListView>
 	    </LinearLayout>
 

@@ -17,10 +17,17 @@ namespace Socialtext.Client
         private System.ComponentModel.IContainer components = null;
 
         private Signal fSignal;
+        private List<Signal> fReplies;
+
+        public Int32 SignalID
+        {
+            get { return fSignal.SignalID; }
+        }
 
         public SignalPanel(Signal sig)
         {
             fSignal = sig;
+            fReplies = new List<Signal>();
 
             this.BackColor = Color.White;
             this.AutoSize = true;
@@ -38,9 +45,9 @@ namespace Socialtext.Client
             this.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
             PictureBox photo = new PictureBox();
+            photo.Image = sig.Person.GetPhoto(SignalsForm.Client);
             photo.Height = 64;
             photo.Width = 64;
-            photo.Image = fSignal.Person.GetPhoto(SignalsForm.Client);
 
             Label username = new Label();
             username.Text = fSignal.BestFullName;
@@ -73,6 +80,17 @@ namespace Socialtext.Client
                 components.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public void AddReply(Signal s)
+        {
+            this.RowCount++;
+            this.fReplies.Add(s);
+
+            SignalPanel reply = new SignalPanel(s);
+
+            this.Controls.Add(reply, 1, this.RowCount - 1);
+            this.SetColumnSpan(reply, 2);
         }
     }
 }
