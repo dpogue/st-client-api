@@ -9,14 +9,30 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class dm_settings.
+ */
 public class dm_settings extends Activity implements OnClickListener {
 
+	/** The Constant PREFS_NAME. */
 	private static final String PREFS_NAME = "dm_settings";
+	
+	/** The server. */
 	private String server;
+	
+	/** The username. */
 	private String username;
+	
+	/** The password. */
 	private String password;
+	
+	/** The ownmsg. */
 	private boolean ownmsg;
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,6 +48,9 @@ public class dm_settings extends Activity implements OnClickListener {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.view.View.OnClickListener#onClick(android.view.View)
+	 */
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -59,6 +78,11 @@ public class dm_settings extends Activity implements OnClickListener {
 		}
 	}
 
+	/**
+	 * Gets the settings.
+	 *
+	 * @return the settings
+	 */
 	public void getSettings() {
 
 		TextView text_url = (TextView) findViewById(R.id.textbox_url);

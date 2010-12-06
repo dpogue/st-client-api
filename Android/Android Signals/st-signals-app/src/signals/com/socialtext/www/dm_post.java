@@ -23,24 +23,57 @@ import android.widget.SimpleAdapter;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class dm_post.
+ */
 public class dm_post extends Activity implements OnClickListener{
 
+	/** The Constant NAME. */
 	private static final String NAME = "NAME";
+	
+	/** The Constant BODY. */
 	private static final String BODY = "BODY";
+	
+	/** The Constant ICON. */
 	private static final String ICON = "ICON";
+	
+	/** The Constant AUTH_ID. */
 	private static final String AUTH_ID = "AUTH_ID";
+	
+	/** The Constant ID. */
 	private static final String ID = "ID";
 	
+	/** The alert. */
 	private AlertDialog alert;
+	
+	/** The groups_dlg. */
 	private ArrayList<String> groups_dlg;
+	
+	/** The d. */
 	public dm_post_data d = new dm_post_data();
+	
+	/** The drawables. */
 	ArrayList<Map<String, Object>> drawables;
+	
+	/** The adapter. */
 	private SimpleAdapter adapter;
+	
+	/** The m handler. */
 	final Handler mHandler = new Handler();
+	
+	/** The reply_to. */
 	private int reply_to; 
+	
+	/** The reply. */
 	private Map<String, Object> reply;
+	
+	/** The btn post. */
 	private Button btnPost;
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,6 +88,9 @@ public class dm_post extends Activity implements OnClickListener{
 
 	}
 	
+	/**
+	 * Init_listview.
+	 */
 	private void init_listview(){
 		
 		ListView lv = (ListView)findViewById(R.id.dm_post_listview);
@@ -93,7 +129,14 @@ public class dm_post extends Activity implements OnClickListener{
 	}
 	
 	
+	/**
+	 * The Class MyViewBinder.
+	 */
 	public class MyViewBinder implements ViewBinder {
+		
+		/* (non-Javadoc)
+		 * @see android.widget.SimpleAdapter.ViewBinder#setViewValue(android.view.View, java.lang.Object, java.lang.String)
+		 */
 		@Override
 		public boolean setViewValue(View view, Object data,
 				String textRepresentation) {
@@ -107,6 +150,9 @@ public class dm_post extends Activity implements OnClickListener{
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see android.view.View.OnClickListener#onClick(android.view.View)
+	 */
 	@Override
 	public void onClick(View v) {
 				
@@ -138,6 +184,9 @@ public class dm_post extends Activity implements OnClickListener{
 		
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
@@ -145,6 +194,9 @@ public class dm_post extends Activity implements OnClickListener{
 	    return true;
 	}
 	
+	/**
+	 * Dialog create.
+	 */
 	private void dialogCreate(){
 		
 		final HashMap<String,String> groups = dm_svc.request.getGroups(dm_svc.request.id);
@@ -169,16 +221,23 @@ public class dm_post extends Activity implements OnClickListener{
 		alert.show();
 	}
 	
+	/** The m update results. */
 	final Runnable mUpdateResults = new Runnable() {
         public void run() {
         	updateResultsInUi();
         }
     };
         
+    /**
+     * Update results in ui.
+     */
     private void updateResultsInUi() {
     	adapter.notifyDataSetChanged();
     }
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
