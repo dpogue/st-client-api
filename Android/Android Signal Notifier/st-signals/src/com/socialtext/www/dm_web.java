@@ -6,8 +6,15 @@ import android.net.Uri;
 import android.os.Bundle;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class dm_web.
+ */
 public class dm_web extends Activity{
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

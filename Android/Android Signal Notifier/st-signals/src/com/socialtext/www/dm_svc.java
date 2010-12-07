@@ -2,23 +2,16 @@ package com.socialtext.www;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -35,7 +28,6 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -48,46 +40,115 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class dm_svc.
+ */
 public class dm_svc extends Service {
 
+	/**
+	 * The Enum Mimetype.
+	 */
 	public enum Mimetype {
-		TEXT("text/plain"), HTML("text/html"), JSON("application/json"), WIKI(
+		
+		/** The TEXT. */
+		TEXT("text/plain"), 
+ /** The HTML. */
+ HTML("text/html"), 
+ /** The JSON. */
+ JSON("application/json"), 
+ /** The WIKI. */
+ WIKI(
 				"application/x-socialtext-wiki");
 
+		/** The m_mimetype. */
 		private String m_mimetype;
 
+		/**
+		 * Instantiates a new mimetype.
+		 *
+		 * @param type the type
+		 */
 		private Mimetype(String type) {
 			m_mimetype = type;
 		}
 
+		/**
+		 * Gets the type.
+		 *
+		 * @return the type
+		 */
 		public String getType() {
 			return m_mimetype;
 		}
 	}
 
+	/**
+	 * The Enum Method.
+	 */
 	public enum Method {
-		GET, PUT, POST, DELETE;
+		
+		/** The GET. */
+		GET, 
+ /** The PUT. */
+ PUT, 
+ /** The POST. */
+ POST, 
+ /** The DELETE. */
+ DELETE;
 	}
 
+	/** The r. */
 	public static boolean r = true;
 
+	/** The Constant PREFS_NAME. */
 	private static final String PREFS_NAME = "dm_settings";
+	
+	/** The username. */
 	private String username;
+	
+	/** The password. */
 	private String password;
+	
+	/** The cookies. */
 	private CookieStore cookies;
+	
+	/** The msg_count. */
 	public static int msg_count = 0;
+	
+	/** The server. */
 	public static String server;
+	
+	/** The id. */
 	private String id;
+	
+	/** The sequence. */
 	private int sequence = 0;
+	
+	/** The init. */
 	private boolean init = false;
+	
+	/** The signal_contents. */
 	private String signal_contents;
+	
+	/** The signal_author. */
 	private String signal_author;
+	
+	/** The m_default_mime. */
 	private Mimetype m_default_mime = Mimetype.JSON; /* JSON by default */
 
+	/** The Constant NOTIFYID. */
 	private static final int NOTIFYID = 1;
+	
+	/** The notification. */
 	private Notification notification;
+	
+	/** The content intent. */
 	private PendingIntent contentIntent;
 
+	/* (non-Javadoc)
+	 * @see android.app.Service#onCreate()
+	 */
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -125,6 +186,11 @@ public class dm_svc extends Service {
 		t.start();
 	}
 
+	/**
+	 * Push read.
+	 *
+	 * @param cmds the cmds
+	 */
 	private void pushRead(JSONArray cmds) {
 		try {
 		
@@ -159,6 +225,9 @@ public class dm_svc extends Service {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Service#onDestroy()
+	 */
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -168,6 +237,11 @@ public class dm_svc extends Service {
 
 	}
 
+	/**
+	 * Gets the cookie.
+	 *
+	 * @return the cookie
+	 */
 	private void getCookie() {
 
 		HttpResponse response;
@@ -206,18 +280,14 @@ public class dm_svc extends Service {
 	/**
 	 * Private function to actually send the HTTP request. Maybe we need a
 	 * callback here that is passed as a parameter too?
-	 * 
-	 * @param url
-	 *            The url to request.
-	 * @param method
-	 *            The method (GET, POST, PUT, DELETE)
-	 * @param contenttype
-	 *            The content type (text/html, text/plain,
-	 *            text/x.socialtext-wiki, application/json)
-	 * @param accepttype
-	 *            The type we accept (see contenttype for values)
-	 * @param data
-	 *            The data that we are sending (if any)
+	 *
+	 * @param url The url to request.
+	 * @param method The method (GET, POST, PUT, DELETE)
+	 * @param contenttype The content type (text/html, text/plain,
+	 * text/x.socialtext-wiki, application/json)
+	 * @param accepttype The type we accept (see contenttype for values)
+	 * @param data The data that we are sending (if any)
+	 * @return the string
 	 */
 	private String request(String url, Method method, Mimetype contenttype,
 			Mimetype accepttype, String data) {
@@ -266,7 +336,7 @@ public class dm_svc extends Service {
 
 				return result;
 			}
-			return entity.toString();
+			return null;
 		} catch (Throwable e) {
 			/* Error handling? What Error handling? :D */
 			e.printStackTrace();
@@ -274,6 +344,11 @@ public class dm_svc extends Service {
 		}
 	}
 
+	/**
+	 * Push connect.
+	 *
+	 * @return the jSON array
+	 */
 	public JSONArray pushConnect() {
 		String path = "/data/push?nowait=1";
 		String json = request(path, Method.GET, Mimetype.JSON, Mimetype.JSON,
@@ -290,6 +365,13 @@ public class dm_svc extends Service {
 		return null;
 	}
 
+	/**
+	 * Push poll.
+	 *
+	 * @param id the id
+	 * @param sequence the sequence
+	 * @return the jSON array
+	 */
 	public JSONArray pushPoll(String id, String sequence) {
 		String path = "/data/push?client_id=" + id + ";sequence=" + sequence;
 		String json = request(path, Method.GET, Mimetype.JSON, Mimetype.JSON,
@@ -306,6 +388,9 @@ public class dm_svc extends Service {
 		return null;
 	}
 
+	/**
+	 * Setup notification.
+	 */
 	private void setupNotification() {
 
 		notification = new Notification(R.drawable.notify_signal,
@@ -315,6 +400,9 @@ public class dm_svc extends Service {
 		notification.defaults |= Notification.DEFAULT_ALL;
 	}
 
+	/**
+	 * Show notification.
+	 */
 	private void showNotification() {
 
 		String ns = Context.NOTIFICATION_SERVICE;
@@ -340,6 +428,11 @@ public class dm_svc extends Service {
 		mNotificationManager.notify(NOTIFYID, notification);
 	}
 
+	/**
+	 * Gets the settings.
+	 *
+	 * @return the settings
+	 */
 	private void getSettings() {
 
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -349,6 +442,9 @@ public class dm_svc extends Service {
 		password = settings.getString("password", "password");
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Service#onBind(android.content.Intent)
+	 */
 	@Override
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub

@@ -13,28 +13,61 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class dm_svc.
+ */
 public class dm_svc extends Service {
 
+	/** The r. */
 	public boolean r = true;
+	
+	/** The ownmsg. */
 	private boolean ownmsg;
+	
+	/** The msg_count. */
 	public static int msg_count = 0;
+	
+	/** The request. */
 	public static dm_request request;
+	
+	/** The d. */
 	public dm_show_data d = dm_show.d;
 
-	
+	/** The Constant PREFS_NAME. */
 	private static final String PREFS_NAME = "dm_settings";
+	
+	/** The id. */
 	private String id;
+	
+	/** The sequence. */
 	private int sequence = 0;
+	
+	/** The init. */
 	private boolean init = false;
+	
+	/** The signal_contents. */
 	private String signal_contents;
+	
+	/** The signal_author. */
 	private String signal_author;
 
 
+	/** The Constant NOTIFYID. */
 	private static final int NOTIFYID = 1;
+	
+	/** The notification. */
 	private Notification notification;
+	
+	/** The m notification manager. */
 	private static NotificationManager mNotificationManager;
+	
+	/** The content intent. */
 	private PendingIntent contentIntent;
 	
+	/* (non-Javadoc)
+	 * @see android.app.Service#onCreate()
+	 */
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -58,7 +91,7 @@ public class dm_svc extends Service {
 						pushRead(response);
 						Log.v("Data: ",response.toString());
 												
-						//Thread.sleep(300000); //5 min poll on the pushd
+						Thread.sleep(300000); //5 min poll on the pushd
 
 					} catch (Throwable e) {
 						e.printStackTrace();
@@ -71,6 +104,11 @@ public class dm_svc extends Service {
 		t.start();
 	}
 	
+	/**
+	 * Push read.
+	 *
+	 * @param cmds the cmds
+	 */
 	private void pushRead(JSONArray cmds) {
 		try {
 		
@@ -105,12 +143,18 @@ public class dm_svc extends Service {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Service#onDestroy()
+	 */
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		r = false;
 	}
 
+	/**
+	 * Setup notification.
+	 */
 	private void setupNotification() {
 
 		notification = new Notification(R.drawable.notify_signal,
@@ -121,12 +165,18 @@ public class dm_svc extends Service {
 
 	}
 	
+	/**
+	 * Cancel notification.
+	 */
 	public static void cancelNotification(){
 		if(mNotificationManager != null){
 			mNotificationManager.cancelAll();
 		}
 	}
 
+	/**
+	 * Show notification.
+	 */
 	private void showNotification() {
 
 		String ns = Context.NOTIFICATION_SERVICE;
@@ -152,6 +202,11 @@ public class dm_svc extends Service {
 		mNotificationManager.notify(NOTIFYID, notification);
 	}
 	
+	/**
+	 * Gets the settings.
+	 *
+	 * @return the settings
+	 */
 	private void getSettings() {
 
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -164,6 +219,9 @@ public class dm_svc extends Service {
 		request = new dm_request(server,username,password);
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Service#onBind(android.content.Intent)
+	 */
 	@Override
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub

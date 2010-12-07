@@ -19,23 +19,49 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleAdapter.ViewBinder;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class dm_show.
+ */
 public class dm_show extends ListActivity {
 	
+	/** The Constant PREFS_NAME. */
 	private static final String PREFS_NAME = "dm_settings";
 
+	/** The Constant NAME. */
 	private static final String NAME = "NAME";
+	
+	/** The Constant BODY. */
 	private static final String BODY = "BODY";
+	
+	/** The Constant ICON. */
 	private static final String ICON = "ICON";
 
+	/** The adapter. */
 	private SimpleAdapter adapter;
+	
+	/** The d. */
 	public static dm_show_data d = new dm_show_data();
+	
+	/** The open_first. */
 	private boolean open_first;
+	
+	/** The activity open. */
 	private boolean activityOpen;
+	
+	/** The service id. */
 	private static Intent serviceID = null;
+	
+	/** The m handler. */
 	final Handler mHandler = new Handler();
+	
+	/** The drawables. */
 	ArrayList<Map<String, Object>> drawables;
 	
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,6 +79,9 @@ public class dm_show extends ListActivity {
 		
 	}
 	
+	/**
+	 * Start_ service.
+	 */
 	private void start_Service(){
 		
 		if(serviceID != null){
@@ -62,6 +91,9 @@ public class dm_show extends ListActivity {
 		startService(serviceID);
 	}
 	
+	/**
+	 * Init_listview.
+	 */
 	private void init_listview(){
 		
 		drawables = d.getData();
@@ -84,6 +116,9 @@ public class dm_show extends ListActivity {
 		setListAdapter(adapter);
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
@@ -91,6 +126,9 @@ public class dm_show extends ListActivity {
 	    return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
@@ -108,6 +146,9 @@ public class dm_show extends ListActivity {
 	}
 	
 	//Every 3 seconds check for new data and cancel notifications
+	/**
+	 * Check new data.
+	 */
 	private void checkNewData() {
 		
         Thread t = new Thread() {
@@ -130,22 +171,32 @@ public class dm_show extends ListActivity {
         t.start();
     }
 		
+	/** The m update results. */
 	final Runnable mUpdateResults = new Runnable() {
         public void run() {
         	updateResultsInUi();
         }
     };
     
+    /**
+     * Update results in ui.
+     */
     private void updateResultsInUi() {
     	adapter.notifyDataSetChanged();
     }
     
+    /* (non-Javadoc)
+     * @see android.app.Activity#onPause()
+     */
     @Override
     public void onPause(){
     	super.onPause();
     	activityOpen = false;
     }
     
+    /* (non-Javadoc)
+     * @see android.app.Activity#onResume()
+     */
     @Override
 	public void onResume(){
 		super.onResume();
@@ -154,11 +205,21 @@ public class dm_show extends ListActivity {
 		dm_svc.cancelNotification();
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.ListActivity#onDestroy()
+	 */
 	public void onDestroy(){
 		super.onDestroy();
 	}
 
+	/**
+	 * The Class MyViewBinder.
+	 */
 	public class MyViewBinder implements ViewBinder {
+		
+		/* (non-Javadoc)
+		 * @see android.widget.SimpleAdapter.ViewBinder#setViewValue(android.view.View, java.lang.Object, java.lang.String)
+		 */
 		@Override
 		public boolean setViewValue(View view, Object data,
 				String textRepresentation) {
@@ -172,6 +233,11 @@ public class dm_show extends ListActivity {
 		}
 	}
 
+	/**
+	 * Gets the settings.
+	 *
+	 * @return the settings
+	 */
 	private void getSettings() {
 
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -179,6 +245,9 @@ public class dm_show extends ListActivity {
 		open_first = settings.getBoolean("open_first", false);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.ListActivity#onListItemClick(android.widget.ListView, android.view.View, int, long)
+	 */
 	public void onListItemClick(ListView parent, View v, int position, long id) {
 		switch(position){
 			default:

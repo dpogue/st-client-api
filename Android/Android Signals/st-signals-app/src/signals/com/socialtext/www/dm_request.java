@@ -38,34 +38,89 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class dm_request.
+ */
 public class dm_request{
 	
+	/**
+	 * The Enum Mimetype.
+	 */
 	public enum Mimetype {
-		TEXT("text/plain"), HTML("text/html"), JSON("application/json"), WIKI(
+		
+		/** The TEXT. */
+		TEXT("text/plain"), 
+ /** The HTML. */
+ HTML("text/html"), 
+ /** The JSON. */
+ JSON("application/json"), 
+ /** The WIKI. */
+ WIKI(
 				"application/x-socialtext-wiki");
 
+		/** The m_mimetype. */
 		private String m_mimetype;
 
+		/**
+		 * Instantiates a new mimetype.
+		 *
+		 * @param type the type
+		 */
 		private Mimetype(String type) {
 			m_mimetype = type;
 		}
 
+		/**
+		 * Gets the type.
+		 *
+		 * @return the type
+		 */
 		public String getType() {
 			return m_mimetype;
 		}
 	}
 
+	/**
+	 * The Enum Method.
+	 */
 	public enum Method {
-		GET, PUT, POST, DELETE;
+		
+		/** The GET. */
+		GET, 
+ /** The PUT. */
+ PUT, 
+ /** The POST. */
+ POST, 
+ /** The DELETE. */
+ DELETE;
 	}
 	
+	/** The server. */
 	public String server;
+	
+	/** The username. */
 	public String username;
+	
+	/** The password. */
 	public String password;
+	
+	/** The id. */
 	public String id;
+	
+	/** The cookies. */
 	public CookieStore cookies;
+	
+	/** The m_default_mime. */
 	private Mimetype m_default_mime = Mimetype.JSON; /* JSON by default */
 	
+	/**
+	 * Instantiates a new dm_request.
+	 *
+	 * @param server the server
+	 * @param username the username
+	 * @param password the password
+	 */
 	public dm_request(final String server, final String username, final String password){
 		this.server = server;
 		this.username = username;
@@ -74,6 +129,11 @@ public class dm_request{
 		getUserID();
 	}
 			
+	/**
+	 * Gets the cookie.
+	 *
+	 * @return the cookie
+	 */
 	public void getCookie() {
 
 		HttpResponse response;
@@ -109,6 +169,11 @@ public class dm_request{
 		}
 	}
 	
+	/**
+	 * Gets the user id.
+	 *
+	 * @return the user id
+	 */
 	public void getUserID(){
 		String path = "/data/people/"+username;
 		String json = request(path, Method.GET, Mimetype.JSON, Mimetype.JSON, null, true);
@@ -127,6 +192,11 @@ public class dm_request{
 		}
 	}
 	
+	/**
+	 * Push connect.
+	 *
+	 * @return the jSON array
+	 */
 	public JSONArray pushConnect() {
 		String path = "/data/push?nowait=1";
 		String json = request(path, Method.GET, Mimetype.JSON, Mimetype.JSON,
@@ -143,6 +213,13 @@ public class dm_request{
 		return null;
 	}
 
+	/**
+	 * Push poll.
+	 *
+	 * @param id the id
+	 * @param sequence the sequence
+	 * @return the jSON array
+	 */
 	public JSONArray pushPoll(String id, String sequence) {
 		String path = "/data/push?nowait=1&client_id=" + id + ";sequence=" + sequence;
 		String json = request(path, Method.GET, Mimetype.JSON, Mimetype.JSON,
@@ -159,6 +236,12 @@ public class dm_request{
 		return null;
 	}
 	
+	/**
+	 * Gets the groups.
+	 *
+	 * @param id the id
+	 * @return the groups
+	 */
 	public HashMap<String,String> getGroups(String id){
 		
 		String path = "/data/networks?accept=json";
@@ -195,7 +278,7 @@ public class dm_request{
     /**
      * Posts a signal to the socialtext stream.
      *
-     * @param signal The signal object to be posted.
+     * @param body the body
      */
     public void postSignal(String body){
         String path = "/data/signals";
@@ -204,6 +287,12 @@ public class dm_request{
         request(path, Method.POST, Mimetype.JSON, Mimetype.JSON, sig, false);
     }
     
+    /**
+     * Post reply.
+     *
+     * @param body the body
+     * @param reply_to the reply_to
+     */
     public void postReply(String body, String reply_to){
         String path = "/data/signals";
         String reply = "{ \"signal_id\":\"" + reply_to + "\"}";
@@ -215,7 +304,8 @@ public class dm_request{
     /**
      * Posts a signal to the socialtext stream.
      *
-     * @param signal The signal object to be posted.
+     * @param body the body
+     * @param groups the groups
      */
     public void postSignal(String body, ArrayList<String> groups){
         String path = "/data/signals";
@@ -227,16 +317,18 @@ public class dm_request{
     }
     
 	/**
-     * Private function to actually send the HTTP request.
-     * Maybe we need a callback here that is passed as a parameter too?
-     *
-     * @param url The url to request.
-     * @param method The method (GET, POST, PUT, DELETE)
-     * @param contenttype The content type (text/html, text/plain,
-     *                      text/x.socialtext-wiki, application/json)
-     * @param accepttype The type we accept (see contenttype for values)
-     * @param data The data that we are sending (if any)
-     */
+	 * Private function to actually send the HTTP request.
+	 * Maybe we need a callback here that is passed as a parameter too?
+	 *
+	 * @param url The url to request.
+	 * @param method The method (GET, POST, PUT, DELETE)
+	 * @param contenttype The content type (text/html, text/plain,
+	 * text/x.socialtext-wiki, application/json)
+	 * @param accepttype The type we accept (see contenttype for values)
+	 * @param data The data that we are sending (if any)
+	 * @param useCookie the use cookie
+	 * @return the string
+	 */
     private String request(String url, Method method, Mimetype contenttype,
                             Mimetype accepttype, String data, boolean useCookie)
     {
@@ -311,6 +403,12 @@ public class dm_request{
 		}
     }
     
+    /**
+     * Download file.
+     *
+     * @param id the id
+     * @return the bitmap
+     */
     public Bitmap downloadFile(String id) {
 		URI uri = null;
 
