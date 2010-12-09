@@ -10,6 +10,9 @@ using System.Collections.Specialized;
 
 namespace Socialtext
 {
+	/// <summary>
+	/// A response from a Push request.
+	/// </summary>
     [DataContract]
     class PushObject
     {
@@ -17,6 +20,9 @@ namespace Socialtext
         private JsonDict fObjectDict;
         private Signal fSignal;
 
+		/// <summary>
+		/// The type of object contained in this response.
+		/// </summary>
         [DataMember(Name = "class", IsRequired = true, Order = 1)]
         public String Class
         {
@@ -24,6 +30,9 @@ namespace Socialtext
             set { fClass = value; }
         }
 
+		/// <summary>
+		/// The object in this response, as a JsonDict.
+		/// </summary>
         [DataMember(Name = "object", IsRequired = true, Order = 2)]
         public JsonDict ObjectDict
         {
@@ -31,6 +40,9 @@ namespace Socialtext
             set { fObjectDict = value; Parse(); }
         }
 
+		/// <summary>
+		/// The object in this response, as an Object.
+		/// </summary>
         public Object Object
         {
             get
@@ -40,6 +52,9 @@ namespace Socialtext
             }
         }
 
+		/// <summary>
+		/// Populate the response object from the JsonDict.
+		/// </summary>
         public void Parse()
         {
             MemoryStream ms = new MemoryStream();
@@ -56,14 +71,34 @@ namespace Socialtext
         }
     }
 
+	/// <summary>
+	/// Wrapper for a standard C# Dictionary<T, U> so that is can be deserialized from JSON.
+	/// </summary>
     [Serializable]
     public class JsonDict : ISerializable
     {
+		/// <summary>
+		/// The contents as a Dictionary<String, String>.
+		/// </summary>
         public Dictionary<string, string> dict;
+		
+		/// <summary>
+		/// Creates a JsonDict wrapper.
+		/// </summary>
         public JsonDict()
         {
             dict = new Dictionary<string, string>();
         }
+		
+		/// <summary>
+		/// Creates a JsonDict wrapper.
+		/// </summary>
+		/// <param name="info">
+		/// The serialization information.
+		/// </param>
+		/// <param name="context">
+		/// The streaming content.
+		/// </param>
         protected JsonDict(SerializationInfo info, StreamingContext context)
         {
             dict = new Dictionary<string, string>();
@@ -72,6 +107,16 @@ namespace Socialtext
                 dict.Add(entry.Name, entry.Value as String);
             }
         }
+		
+		/// <summary>
+		/// Serialize the dictionary keys and values.
+		/// </summary>
+		/// <param name="info">
+		/// The serialization information.
+		/// </param>
+		/// <param name="context">
+		/// The streaming context.
+		/// </param>
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             foreach (string key in dict.Keys)
@@ -81,19 +126,40 @@ namespace Socialtext
         }
     }
 
+	/// <summary>
+	/// The Socialtext Push Client.
+	/// </summary>
     public class PushClient
     {
-        Cookie fUserCookie;
-        String fURL;
-        Boolean fConnected;
-        HttpWebRequest fRequest;
+        private Cookie fUserCookie;
+        private String fURL;
+        private Boolean fConnected;
+        private HttpWebRequest fRequest;
 
         public delegate void SignalDelegate(Signal s);
+		/// <summary>
+		/// Triggered when a Signal is received.
+		/// </summary>
         public event SignalDelegate OnSignalPosted;
 
         public delegate void GoodbyeDelegate(String reason, UInt64 reconnect);
+        /// <summary>
+        /// Triggered when the server is shutting down the connection.
+        /// </summary>
         public event GoodbyeDelegate OnGoodbye;
 
+		/// <summary>
+		/// Creates a new Push client.
+		/// </summary>
+		/// <param name="host">
+		/// The Socialtext server address.
+		/// </param>
+		/// <param name="username">
+		/// The username used to access Socialtext.
+		/// </param>
+		/// <param name="password">
+		/// The password used to access Socialtext.
+		/// </param>
         public PushClient(String host, String username, String password)
         {
             StringBuilder url = new StringBuilder(host);
@@ -137,6 +203,13 @@ namespace Socialtext
             }
         }
 
+		/// <summary>
+		/// Closes the Push client connection.
+		/// </summary
+		/// <remarks>
+		/// This doesn't seem to actually terminate an open connection.
+		/// This can lead to lingering connections after an app is closed!
+		/// </remarks>
         public void Shutdown()
         {
             fConnected = false;
@@ -146,6 +219,9 @@ namespace Socialtext
             }
         }
 
+		/// <summary>
+		/// Opens and runs a Push connection to receive data.
+		/// </summary>
         public void Run()
         {
             bool nowait = true;

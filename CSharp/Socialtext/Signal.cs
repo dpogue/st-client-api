@@ -8,6 +8,9 @@ using System.Net;
 
 namespace Socialtext
 {
+	/// <summary>
+	/// A Socialtext Signal.
+	/// </summary>
     [DataContract]
     public class Signal
     {
@@ -19,6 +22,9 @@ namespace Socialtext
         private Person fPerson;
         private Signal fInReplyTo;
 
+		/// <summary>
+		/// The textual content of the Signal.
+		/// </summary>
         [DataMember(Name="body", IsRequired = false)]
         public String Body
         {
@@ -26,6 +32,9 @@ namespace Socialtext
             set { fBody = value; }
         }
 
+		/// <summary>
+		/// The unique identification number for this Signal.
+		/// </summary>
         [DataMember(Name="signal_id")]
         public Int32 SignalID
         {
@@ -33,6 +42,9 @@ namespace Socialtext
             set { fSignalID = value; }
         }
 
+		/// <summary>
+		/// The URI that links to this specific Signal.
+		/// </summary>
         [DataMember(Name = "uri", IsRequired = false, EmitDefaultValue = false)]
         public String URI
         {
@@ -40,6 +52,9 @@ namespace Socialtext
             set { fURI = value; }
         }
 
+		/// <summary>
+		/// A hash of this Signal object, suitable for use in a hashtable.
+		/// </summary>
         [DataMember(Name = "hash", IsRequired = false, EmitDefaultValue = false)]
         public String Hash
         {
@@ -47,6 +62,9 @@ namespace Socialtext
             set { fHash = value; }
         }
 
+		/// <summary>
+		/// The identifier of the Person who posted the Signal.
+		/// </summary>
         [DataMember(Name = "user_id", IsRequired = false, EmitDefaultValue = false)]
         public UInt32 UserID
         {
@@ -60,6 +78,9 @@ namespace Socialtext
             }
         }
 
+		/// <summary>
+		/// The full name of the Person who posted the Signal.
+		/// </summary>
         [DataMember(Name = "best_full_name", IsRequired = false, EmitDefaultValue = false)]
         public String BestFullName
         {
@@ -73,6 +94,9 @@ namespace Socialtext
             }
         }
 
+		/// <summary>
+		/// The Signal object to which the Signal is a reply.
+		/// </summary>
         [DataMember(Name = "in_reply_to", IsRequired = false, EmitDefaultValue = false)]
         public Signal InReplyTo
         {
@@ -80,6 +104,9 @@ namespace Socialtext
             set { fInReplyTo = value; }
         }
 
+		/// <summary>
+		/// The date & time of the Signal posting, as a String.
+		/// </summary>
         [DataMember(Name = "at", IsRequired = false, EmitDefaultValue = true)]
         public String At
         {
@@ -87,23 +114,50 @@ namespace Socialtext
             set { fDate = DateTime.Parse(value); }
         }
 
+		/// <summary>
+		/// The date & time of the Signal posting, as a DateTime.
+		/// </summary>
         public DateTime Date
         {
             get { return fDate; }
             set { fDate = value; }
         }
 
+		/// <summary>
+		/// The Person who posted the Signal.
+		/// </summary>
         public Person Person
         {
             get { return fPerson; }
             set { fPerson = value; }
         }
 
+		/// <summary>
+		/// Fetches the most recent Signals using ReST.
+		/// </summary>
+		/// <param name="rest">
+		/// A <see cref="RestClient"/> connection used to fetch the Signals.
+		/// </param>
+		/// <returns>
+		/// A <see cref="List<Signal>"/> containing the most recent Signals.
+		/// </returns>
         public static List<Signal> Get(RestClient rest)
         {
             return Get(rest, String.Empty);
         }
 
+		/// <summary>
+		/// Fetches Signals matching criteria using ReST.
+		/// </summary>
+		/// <param name="rest">
+		/// A <see cref="RestClient"/> connection used to fetch the Signals.
+		/// </param>
+		/// <param name="criteria">
+		/// The criteria to be used when fetching Signals.
+		/// </param>
+		/// <returns>
+		/// A <see cref="List<Signal>"/> containing the returned Signals.
+		/// </returns>
         public static List<Signal> Get(RestClient rest, String criteria)
         {
             StringBuilder url = new StringBuilder(rest.Host);
